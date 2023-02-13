@@ -11,27 +11,27 @@
       ></v-text-field>
       <v-btn class="btn" type="submit">Iniciar</v-btn>
     </v-col>
+    {{ pda }}
   </v-row>
 </template>
 
 <script>
 export default {
-  /* async created() {
+  async created() {
     await this.$axios
-      .get("https://dummyjson.com/products")
+      .get("localStorage")
       // Quan acabi
       .then((resposta) => {
-        console.log("M'he descarregat les dades bé", resposta.data);
-        this.productsIn = resposta.data.products;
-        console.log("Opp", this.productsIn);
+        console.log("M'he descarregat les dades bé", resposta.pda);
+        this.pda = resposta.pda;
+        console.log("Opp", this.pda);
       });
   },
   data() {
     return {
-      productsIn: [],
+      pda: [],
     };
   },
-};*/
 };
 </script>
 
