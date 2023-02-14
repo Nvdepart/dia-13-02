@@ -1,6 +1,6 @@
 <template>
-  <v-app dark>
-    <v-main>
+  <v-app>
+    <v-main class="body">
       <v-container style="padding: 0px">
         <Nuxt />
       </v-container>
@@ -11,3 +11,9 @@
 <script>
 export default {};
 </script>
+<style>
+.body {
+  background: #59abe3 none repeat scroll 0% 0%;
+  margin: 0px;
+}
+</style>

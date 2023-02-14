@@ -1,7 +1,29 @@
-// Ref: https://github.com/nuxt-community/vuetify-module#customvariables
-//
-// The variables you want to modify
-// $font-size-root: 20px;
+<template>
+  <div id="div0">
+    <p id="estado" class="p">
+      Indique el código de la PDA <br />
+      para iniciar la pistola
+    </p>
+    <div style="text-align: center">
+      <v-text-field
+        id="numpda"
+        name="id"
+        value="123456"
+        prepend-inner-icon="mdi-remote"
+        outlined
+        rounded
+        height="50"
+      ></v-text-field>
+    </div>
+    <p><v-btn class="button" id="btPDA">Iniciar</v-btn></p>
+  </div>
+</template>
+
+<script>
+export default {};
+</script>
+
+<style lang="scss" scoped>
 .body {
   background: #59abe3 none repeat scroll 0% 0%;
   margin: 0px;
@@ -63,49 +85,4 @@
   vertical-align: 0px;
   font-weight: bold;
 }
-.accordion {
-  background: primary;
-  color: primary;
-  cursor: pointer;
-  padding: 18px;
-  width: 96%;
-  border: none;
-  text-align: center;
-  outline: none;
-  font-size: 28px;
-  transition: 0.4s;
-  border-radius: 10px;
-}
-
-.accordion2 {
-  background-color: rgba(9, 80, 80, 0.363);
-  color: #444;
-  cursor: pointer;
-  padding: 18px;
-  width: 96%;
-  border: none;
-  text-align: center;
-  outline: none;
-  font-size: 24px;
-  transition: 0.4s;
-  border-radius: 10px;
-  border-top: 1px solid #999;
-  border-right: 1px solid #999;
-  border-left: 1px solid #999;
-}
-
-.accordion:hover {
-  background-color: #666699;
-}
-
-.active {
-  background-color: #000066;
-}
-
-.panel {
-  padding: 0 20px;
-  display: none;
-  background-color: white;
-  overflow: hidden;
-  font-size: 40;
-}
+</style>

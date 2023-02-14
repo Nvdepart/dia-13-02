@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script type="text/javascript" src="/assets/pda.js"></script>
+    <script>
+      checkAll();
+    </script>
+    <style>
+      body {
+        font-family: roboto;
+        text-align: center;
+      }
+
+      .accordion {
+        background-color: #3333cc;
+        color: #fff;
+        cursor: pointer;
+        padding: 18px;
+        width: 96%;
+        border: none;
+        text-align: center;
+        outline: none;
+        font-size: 28px;
+        transition: 0.4s;
+        border-radius: 10px;
+      }
+
+      .accordion2 {
+        background-color: rgba(9, 80, 80, 0.363);
+        color: #444;
+        cursor: pointer;
+        padding: 18px;
+        width: 96%;
+        border: none;
+        text-align: center;
+        outline: none;
+        font-size: 24px;
+        transition: 0.4s;
+        border-radius: 10px;
+        border-top: 1px solid #999;
+        border-right: 1px solid #999;
+        border-left: 1px solid #999;
+      }
+
+      .accordion:hover {
+        background-color: #666699;
+      }
+
+      .active {
+        background-color: #000066;
+      }
+
+      .panel {
+        padding: 0 20px;
+        display: none;
+        background-color: white;
+        overflow: hidden;
+        font-size: 40;
+      }
+    </style>
+  </head>
+  <body>
+    <button class="accordion">Preparar</button>
+    <div class="panel">
+      <button
+        type="submit"
+        class="accordion2"
+        id="Picking"
+        onclick="window.location.href='/picking_select'"
+      >
+        Picking
+      </button>
+    </div>
+    <button class="accordion">Expedir</button>
+    <div class="panel">
+      <button class="accordion2">1 expedición</button>
+      <button class="accordion2">Multiples</button>
+    </div>
+    <button class="accordion">Ubicar</button>
+    <div class="panel">
+      <button
+        type="submit"
+        onclick="window.location.href='/reponer';"
+        class="accordion2"
+      >
+        Reponer
+      </button>
+      <button class="accordion2">Entradas</button>
+      <button class="accordion2">Reubicar</button>
+      <button class="accordion2">Reubicar Toynamics</button>
+    </div>
+    <button class="accordion">Devoluciones</button>
+    <div class="panel">
+      <button class="accordion2">Palet/Caja/Producto</button>
+      <button class="accordion2">Info Palet Caja</button>
+      <button class="accordion2">Palet/Producto/Caja</button>
+      <button class="accordion2">Palet/Caja</button>
+    </div>
+    <button class="accordion">Packing</button>
+    <div class="panel">
+      <button class="accordion2">Palet/Caja/Producto</button>
+      <button class="accordion2">Info Palet Caja</button>
+      <button class="accordion2">Palet/Producto/Caja</button>
+      <button class="accordion2">Palet/Caja</button>
+    </div>
+    <button class="accordion">Pesos</button>
+    <div class="panel">
+      <button class="accordion2">Unidad/Inner/Master</button>
+      <button class="accordion2">Unidad</button>
+      <button class="accordion2">Inner</button>
+      <button class="accordion2">Master</button>
+    </div>
+    <button class="accordion">Tareas</button>
+    <div class="panel"><button class="accordion2">Tareas</button></div>
+    <button class="accordion">Inventario</button>
+    <div class="panel">
+      <button class="accordion2">Inventario</button>
+      <button class="accordion2">Ubic Vacias</button>
+    </div>
+    <script>
+      var acc = document.getElementsByClassName("accordion");
+      var i;
+
+      for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function () {
+          var panels = document.getElementsByClassName("panel");
+          for (j = 0; j < panels.length; j++) {
+            panels[j].style.display = "none";
+          }
+          var acc2 = document.getElementsByClassName("accordion");
+          for (k = 0; k < panels.length; k++) {
+            acc2[k].classList.remove("active");
+          }
+
+          this.classList.toggle("active");
+          var panel = this.nextElementSibling;
+          //    if (panel.style.display === "block") {
+          //      panel.style.display = "none";
+          //    } else {
+          panel.style.display = "block";
+          //    }
+        });
+      }
+    </script>
+  </body>
+</html>

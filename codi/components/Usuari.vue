@@ -1,68 +1,85 @@
 <template>
-  <v-row class="card">
-    <v-col cols="6">
+  <div id="div0">
+    <p id="estado" class="p">Indica el usuario</p>
+    <div style="text-align: center">
       <v-text-field
-        clearable
-        label="Usuari"
-        placeholder="Enter your id de usuari"
+        id="usuario"
+        name="id"
         prepend-inner-icon="mdi-account"
-        persistent-clear
+        value=""
         outlined
-        width:"150px"
         rounded
+        height="50"
       ></v-text-field>
-      <v-btn class="btn" type="submit">Iniciar</v-btn>
-    </v-col>
-    {{ pda }}
-  </v-row>
+    </div>
+    <v-btn class="button" id="btUsu">Iniciar</v-btn>
+  </div>
 </template>
 
 <script>
-export default {
-  async created() {
-    await this.$axios
-      .get("localStorage")
-      // Quan acabi
-      .then((resposta) => {
-        console.log("M'he descarregat les dades bé", resposta.pda);
-        this.pda = resposta.pda;
-        console.log("Opp", this.pda);
-      });
-  },
-  data() {
-    return {
-      pda: [],
-    };
-  },
-};
+export default {};
 </script>
 
 <style scoped>
-.card {
-  width: 480px;
-  height: 800px;
-  position: relative;
-  top: 60%;
-  left: 60%;
-  transform: translate(-40%, -40%);
+.body {
+  background: #59abe3 none repeat scroll 0% 0%;
+  margin: 0px;
 }
 
-.btn {
-  cursor: "pointer";
-  background-color: primary;
-  size: "large";
-  border-radius: 10px;
-  border: 2px solid rgb(0, 0, 0);
+#div0 {
+  width: 460px;
+  height: 600px;
+  background: #e6e6e6 none repeat scroll 0% 0%;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px -0px black;
+  margin: calc(5vh - 5px) auto;
+  padding: 10px 30px;
+  max-width: calc(100vw - 10px);
+  box-sizing: border-box;
+  position: relative;
 }
-.btn:hover {
-  background-color: greenyellow;
-  color: rgb(27, 23, 223);
-}
-.v-text-field--outlined >>> fieldset {
-  background: white;
-  border-color: black;
+
+#divcenter {
   text-align: center;
-  border-radius: 40px;
-  display: block;
+}
+
+.p {
+  font-size: 30px;
+  text-align: center;
+}
+
+.button {
+  border-radius: 10px;
+  border: 2px solid black;
+  background-color: #0979b0 none repeat scroll 0% 0%;
+  color: blue;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 30px;
+  left: 30%;
+  width: 180px;
+}
+
+.button:hover {
+  background: #0f8fe4 none repeat scroll 0% 0%;
+  color: #950a0a;
+}
+
+#id {
+  font-size: larger;
+}
+
+#usuario {
+  text-align: center;
+  font-weight: bold;
+  border-radius: 10px;
+  font-size: 30px;
+  border: 1px solid black;
+  width: 60%;
+}
+
+.p {
+  vertical-align: 0px;
+  font-weight: bold;
 }
 </style>

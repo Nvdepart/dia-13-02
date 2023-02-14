@@ -1,25 +1,25 @@
 <template>
-  <v-row>
-    <v-col align="center">
-      <h3>Usuari</h3>
-      <v-card class="mx-auto" max-width="300">
-        <v-img
-          height="150px"
-          src="https://images.unsplash.com/photo-1593640495253-23196b27a87f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1032&q=80"
-          alt="Image no disponible"
-        ></v-img>
-        <v-card-title>IdUsuari :</v-card-title>
-        <v-card-text align="left">Nom Usuari :</v-card-text>
-      </v-card>
-      <br />
-      <v-btn color="primary" :to="'/'">Home</v-btn>
+  <v-row class="card">
+    <v-col cols="6">
+      <v-text-field
+        clearable
+        label="Usuari"
+        placeholder="Enter your id de usuari"
+        prepend-inner-icon="mdi-account"
+        persistent-clear
+        outlined
+        width="150px"
+        rounded
+      ></v-text-field>
+      <v-btn class="btn" type="submit">Iniciar</v-btn>
     </v-col>
+    {{ pda }}
   </v-row>
 </template>
 
 <script>
 export default {
-  /* async created() {
+  async created() {
     await this.$axios
       .get("localStorage")
       // Quan acabi
@@ -33,7 +33,7 @@ export default {
     return {
       pda: [],
     };
-  },*/
+  },
 };
 </script>
 
