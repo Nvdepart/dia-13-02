@@ -23,23 +23,33 @@
           width="400"
           height="50"
           dark
+          style="border-radius: 16px"
           v-on="on"
         >
           {{ element.title }}
         </v-btn>
       </template>
-      <v-list>
+      <v-list style="border-radius: 16px">
         <v-list-item
           v-for="(item, subIndex) in element.items"
           :key="subIndex"
           @click="navigateToPage(item.page)"
-        >
-          <v-list-item-title>
-            {{ item.title }}
-          </v-list-item-title>
-          <v-list-item-subtitle v-if="item.subtitle">
-            {{ item.subtitle }}
-          </v-list-item-subtitle>
+          style="
+            border-radius: 16px;
+            margin: 4px;
+            background-color: rgba(0, 0, 255, 0.8);
+            color: azure;
+            text-align: center;
+            size-font: 25px;
+          "
+          ><v-list-item-content>
+            <v-list-item-title>
+              {{ item.title }}
+            </v-list-item-title>
+            <v-list-item-subtitle v-if="item.subtitle">
+              {{ item.subtitle }}
+            </v-list-item-subtitle>
+          </v-list-item-content>
         </v-list-item>
       </v-list>
     </v-menu>
@@ -48,6 +58,10 @@
 
 <script>
 export default {
+  created() {
+    // Récupérez l'utilisateur à partir des paramètres de la route
+    this.user = this.$route.params.user;
+  },
   methods: {
     navigateToPage(page) {
       this.$router.push(page);
@@ -64,6 +78,7 @@ export default {
     return {
       menu: [false, false, false, false], // un état pour chaque bouton
       animatedIndex: null,
+      user: {},
       elements: [
         {
           title: "Preparar",
@@ -130,38 +145,4 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "assets/variables.scss";
-.animate__animated {
-  animation-duration: 1s;
-}
-
-.animate__bounceIn {
-  animation-name: animate__bounceIn;
-}
-
-@keyframes animate__bounceIn {
-  from,
-  20%,
-  40%,
-  60%,
-  80%,
-  to {
-    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
-    transform: translate3d(0, 0, 0);
-  }
-
-  40%,
-  60% {
-    animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
-    transform: translate3d(0, -30px, 0);
-  }
-
-  70% {
-    animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
-    transform: translate3d(0, -15px, 0);
-  }
-
-  90% {
-    transform: translate3d(0, -4px, 0);
-  }
-}
 </style>

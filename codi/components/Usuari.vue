@@ -5,6 +5,7 @@
       <v-text-field
         id="usuario"
         name="id"
+        v-model="userId"
         prepend-inner-icon="mdi-account"
         value=""
         outlined
@@ -12,12 +13,43 @@
         height="50"
       ></v-text-field>
     </div>
-    <v-btn class="button" id="btUsu">Iniciar</v-btn>
+    <v-btn @click="checkUserExistence" class="button" id="btUsu">Iniciar</v-btn>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      userId: "",
+      userExists: false,
+    };
+  },
+  methods: {
+    checkUserExistence() {
+      axios
+        .get(`/users/${this.userId}`)
+        .then((response) => {
+          if (response.data.exists) {
+            // L'utilisateur existe, récupérez les informations de l'utilisateur
+            this.userExists = true;
+            const user = response.data.user;
+
+            // Ouvrez la page de menu et passez les informations de l'utilisateur en tant que paramètres d'URL
+            this.$router.push({ name: "menu", params: { user } });
+          } else {
+            // L'utilisateur n'existe pas, ouvrez la page d'authentification initiale
+
+            this.userExists = false;
+            this.$router.push({ name: "initPistola" });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
