@@ -1,19 +1,18 @@
 <template>
-  <div>
-    <IdUsuari />
-  </div>
-  <div v-if="dataFromLocalStorage" class="divUsuari">
+  <UsuariId></UsuariId>
+
+  <!-- <div v-if="dataFromLocalStorage" class="divUsuari">
     <Usuari :data="dataFromLocalStorage"></Usuari>
-  </div>
+  </div>-->
 </template>
 
 <script>
 export default {
-  computed: {
+  /* computed: {
     dataFromLocalStorage() {
       return JSON.parse(localStorage.getItem("key"));
     },
-  },
+  },*/
 };
 </script>
 
@@ -30,6 +29,6 @@ export default {
   flex-direction: row-reverse;
   width: 480px;
   height: 800px;
-  background-color: #e6e6e6;
+  background-color: #bd2424;
 }
 </style>

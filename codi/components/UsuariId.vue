@@ -1,17 +1,25 @@
 <template>
-  <v-row class="card">
-    <v-col cols="6">
-      <h1>Resultat de importation</h1>
-      <pre>{{ pda.usuari }}</pre>
-      <v-btn class="btn" type="submit">Iniciar</v-btn>
+  <v-row>
+    <v-col align="center">
+      <h3>Usuari</h3>
+      <v-card>
+        <v-img
+          height="150px"
+          src="https://images.unsplash.com/photo-1593640495253-23196b27a87f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1032&q=80"
+          gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+        ></v-img>
+        <v-card-title>IdUsuari :</v-card-title>
+        <v-card-text>Nom Usuari :</v-card-text>
+      </v-card>
+      <br />
+      <v-btn color="primary" :to="'/'">Home</v-btn>
     </v-col>
-    {{ pda }}
   </v-row>
 </template>
 
 <script>
 export default {
-  async created() {
+  /* async created() {
     await this.$axios
       .get("localStorage")
       // Quan acabi
@@ -25,7 +33,7 @@ export default {
     return {
       pda: [],
     };
-  },
+  },*/
 };
 </script>
 

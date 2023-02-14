@@ -8,6 +8,8 @@
         prepend-inner-icon="mdi-account"
         persistent-clear
         outlined
+        width:"150px"
+        rounded
       ></v-text-field>
       <v-btn class="btn" type="submit">Iniciar</v-btn>
     </v-col>
