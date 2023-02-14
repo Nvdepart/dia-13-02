@@ -1,4 +1,7 @@
 <template>
+  <div>
+    <IdUsuari />
+  </div>
   <div v-if="dataFromLocalStorage" class="divUsuari">
     <Usuari :data="dataFromLocalStorage"></Usuari>
   </div>

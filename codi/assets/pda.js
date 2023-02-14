@@ -2,25 +2,25 @@ var $serverIP = "";
 
 function init(numInit) {
   // buscar si hi ha config de ip, port i usuari
-  let ip = window.localStorage.getItem("ip");
-  let port = window.localStorage.getItem("port");
-  let userid = window.localStorage.getItem("usuid");
+  let ip = window.localStorage.getItem("IP");
+  let port = window.localStorage.getItem("PORT");
+  let userid = window.localStorage.getItem("USUID");
   // si no hi ha ip o port redirigir a config
-  if ((ip == null)(port == null) && numInit < 10) {
+  if ((ip == null) || (port == null) && numInit < 10) {
           location.replace("/");
     return;
   }
-  $serverIP = "http://" + ip + ":" + port + "/";
+  $serverIP = 'http://' + ip + ':' + port + '/';
   // si no hi ha usuari redirigir a usuari
-  if (userid == null && numInit < 9) {
+  if ((userid == null) && (numInit < 9)) {
     location.replace("/");
     return;
   }
 
   //afegir functions de keypress, keydown i selectall (focus)
-  var alist = document.querySelectorAll("input");
+  var alist = document.querySelectorAll('input');
   for (var aitem of alist) {
-    aitem.addEventListener("keypress", function (e) {
+    aitem.addEventListener('keypress', function (e) {
       if (e.key == "Enter") {
         keypress(e.key, this);
       }
@@ -29,7 +29,7 @@ function init(numInit) {
         if(e.key =="ArrowUp"){
             keydown(38, this);
         }
-        else if(e.key =="ArrowDown"){
+        else if(e.key == "ArrowDown"){
             keydown(40, this);
         }
     });
@@ -41,12 +41,12 @@ function init(numInit) {
   }
 
   // imitar adal i abaix fent click
-  aitem = document.getElementById('sube');
+  aitem = document.getElementById("sube");
   if( aitem != null ) 
-  aitem.addEventListener('click', function () {
-    keydown(38, $actualItem);
-  });
-  aitem = document.getElementById('baja');
+    aitem.addEventListener('click', function () {
+        keydown(38, $actualItem);
+        });
+  aitem = document.getElementById("baja");
   if(aitem != null)
     aitem.addEventListener('click', function () {
         keydown(40, $actualItem);
@@ -56,6 +56,10 @@ function init(numInit) {
 function keypress(tecla, element){
     if (saltarEnrera(element))
     return;
+
+    if(!validaValors(element))
+    return;
+
     if (enviardades(element)){
         if ($menus.menuok == '')
         location.replace($menus.menuOk);
@@ -72,14 +76,14 @@ function saltar_a_camp(element){
 function saltarEnrera(element){
     // verifica si el valor es buit si es aixi salta al camp
     if (element.value == ""){
-        let camp_abans =element.getAttribute('campabans');
+        let camp_abans = element.getAttribute('campabans');
         // si te atribut campsabans saltar 
         if (camp_abans != null)
             document.getElementById(camp_abans).focus();
             return true;
-        }
-        return false;
     }
+        return false;
+}
 
 function validaValors(element){
         // comproba si haq de complir uns certs valors
@@ -88,14 +92,14 @@ function validaValors(element){
             //busquem els valors a comprobar
             let elementValor = document.getElementById(element.getAttribute('comprobar'));
             if (elementValor != null){
-                if (elementValor.value.indexOf(";" + element.value +";", 0) => 0)
+                if (elementValor.value.indexOf(";" + element.value + ";", 0) >= 0)
                 return true;
-                alert("valor: " + elementValor.value + " no valido")
+                alert("valor: " + element.value + " no valido")
                 return false;
             }
         }
         return true;
-    }
+}
 async function enviardades(element){
     let strPistola = composaString(element);
     if (strPistola == "")
@@ -105,7 +109,8 @@ async function enviardades(element){
     {
         global_json = await getServerText('usuari', 14);
         acctualitzaCamps(global_json);
-        resetTaula();actualizarDatosTabla(global_json);
+        resetTaula();
+        actualizarDatosTabla();
         return true;
     }
     return false;
@@ -116,24 +121,24 @@ async function getServerText(sFuncio, sBody){
         colorOriginal = document.body.style.backgroundColor;
         document.body.style.backgroundColor = "red";
         
-        let myObject = await fetch($serverIP + sFuncio, { method: 'post', body: sBody});
+        let myObject = await fetch($serverIP + sFuncio, { method: 'POST', body: sBody});
 
         // let 
         await(document.body.style.backgroundColor = colorOriginal);
         //await(console.log(myText))
         return myText = await myObject.text();
-        } catch(err){
+    } catch(err){
             alert(' Sin comunication'); // TypeError: failed to fetch
             document.body.style.backgroundColor = colorOriginal;
             return '';
-        }
+    }
 }
 
 function checkPda(state){
     let IdPistola = localStorage.getItem("ID");
-    console.log("pistola" + idPistola);
+    console.log("pistola " + idPistola);
     if (idPistola == null){
-        if (state !=0)
+        if (state != 0)
         window.location.href ='/';
         return false;
     }
@@ -144,7 +149,7 @@ function checkUser(state){
     if (checkPda(1)){
         if (checkIp(1)){
             let Name = localStorage.getItem("NAME");
-            let UsuId = localStorage.getItem("UsuId");
+            let UsuId = localStorage.getItem("USUID");
             // alert(idPistola);
             if ((Name == null) || (UsuId == null)){
                 if (state !=0)
@@ -161,9 +166,9 @@ function checkUser(state){
 function checkIp(state){
     if(checkPda(1)){
         let IP = localStorage.getItem('IP');
-        let Port = localStorage.getItem('Port');
+        let Port = localStorage.getItem('PORT');
         console.log(IP + ' ' + Port);
-        if ((IP === null) || (Port === null)) {
+        if ((IP == null) || (Port == null)) {
             if (state !=0)
             window.location.href= '/ip_port';
             return false;
@@ -186,18 +191,19 @@ function checkAll(state){
 
 function composaString(element){
     // mirar si es un camp per enviar dades
-    let senddata = document.getAttribute('senddata');
+    let senddata = element.getAttribute('senddata');
     if (senddata != null){
         var strenviar = {};
         strenviar.usuid = $userid;
         strenviar.menunom = $menus.nomMenu;
         strenviar.menuid = $menus.menuActual;
+
         // mirar el codi num de enviament
         let idenviar = element.getAttribute('envioid');
         let elementsenviar = document.querySelectorAll("[envioid]");
-        elementsenviar.forEach(function (element){
+        elementsenviar.forEach(function (ele_enviar){
             // ( no enviar dades que estiguin en camps posteriors)
-            if (idenviar => ele_enviar.getAttribute('envioid')){
+            if (idenviar >= ele_enviar.getAttribute('envioid')){
                 strenviar[ele_enviar.id] = ele_enviar.value;
             }
             else {
