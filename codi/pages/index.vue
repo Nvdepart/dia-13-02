@@ -1,7 +1,7 @@
 <template>
   <Usuari></Usuari>
   <!-- <InitPistola></InitPistola>-->
-  <!--<Menu></Menu>-->
+  <!-- <Menu />-->
   <!--<Landing-Annimee></Landing-Annimee>-->
 </template>
 

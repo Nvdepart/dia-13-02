@@ -58,6 +58,7 @@
 export default {
   created() {
     // Récupérez l'utilisateur à partir des paramètres de la route
+
     this.user = this.$route.params.user;
   },
   // récupérer les informations de l'utilisateur à partir du userId passé en paramètre
@@ -72,8 +73,8 @@ export default {
       });
   },*/
   methods: {
-    navigateToPage(menu) {
-      this.$router.push(menu);
+    navigateToPage(page) {
+      this.$router.push(page);
     },
     toggleMenu(index) {
       this.animatedIndex = index;
@@ -87,7 +88,7 @@ export default {
     return {
       menu: [false, false, false, false], // un état pour chaque bouton
       animatedIndex: null,
-      user: {},
+      userM: {},
       elements: [
         {
           title: "Preparar",

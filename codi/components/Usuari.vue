@@ -26,7 +26,6 @@
       <p>Nombre: {{ user.Name }}</p>
       <p>Resulta: {{ user.Result }}</p>
       <p>Msg: {{ user.Msg }}</p>
-      <v-btn :to="menu" class="button" id="btUsu">menu</v-btn>
     </div>
   </div>
 </template>
@@ -54,7 +53,7 @@ export default {
             this.userExists = true;
             console.log(this.userExists);
             this.user = response.data;
-            console.log(user);
+            console.log(this.user);
 
             // Ouvrez la page de menu et passez les informations de l'utilisateur en tant que paramètres d'URL
             this.$router.push({
