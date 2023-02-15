@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex flex-column align-center">
+  <div class="d-flex flex-column menu">
     <v-menu
       v-for="(element, index) in elements"
       :key="index"
@@ -8,7 +8,7 @@
       :nudge-right="40"
       transition="scale-transition"
       class="mb-5"
-      width="400"
+      width="380"
       height="50"
       @click="toggleMenu(index)"
       :class="{
@@ -23,7 +23,7 @@
           width="400"
           height="50"
           dark
-          style="border-radius: 16px"
+          style="border-radius: 16px; color: white"
           v-on="on"
         >
           {{ element.title }}
@@ -34,14 +34,8 @@
           v-for="(item, subIndex) in element.items"
           :key="subIndex"
           @click="navigateToPage(item.page)"
-          style="
-            border-radius: 16px;
-            margin: 4px;
-            background-color: rgba(0, 0, 255, 0.8);
-            color: azure;
-            text-align: center;
-            size-font: 25px;
-          "
+          class="list-item"
+          style="color: white"
           ><v-list-item-content>
             <v-list-item-title>
               {{ item.title }}
@@ -145,4 +139,28 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "assets/variables.scss";
+.menu {
+  width: 460px;
+  height: 600px;
+  max-width: 480px;
+  max-height: 800px;
+  align-content: center;
+  margin: 20px auto;
+}
+.list-item {
+  border-radius: 16px;
+  margin: 4px;
+  background-color: rgba(0, 0, 255, 0.8);
+
+  text-align: center;
+  font-size: 25px;
+}
+.list-item :hover {
+  border-radius: 16px;
+  margin: 4px;
+  background-color: rgba(0, 153, 255, 0.8);
+  color: rgb(187, 19, 202);
+  text-align: center;
+  font-size: 25px;
+}
 </style>

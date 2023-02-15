@@ -1,5 +1,8 @@
 <template>
-  <Menu></Menu>
+  <!--<Usuari></Usuari>-->
+  <!-- <InitPistola></InitPistola>-->
+  <!--<Menu></Menu>-->
+  <Landing-Annimee></Landing-Annimee>
 </template>
 
 <script>
