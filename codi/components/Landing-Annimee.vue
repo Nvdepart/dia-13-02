@@ -31,7 +31,7 @@
           <v-col cols="12" md="4" class="text-center">
             <v-img
               class="mb-6"
-              :src="require('@/assets/images/icons/heart.png')"
+              src="require('@/assets/images/icons/heart.png')"
               width="64"
               height="64"
               transition="scale-transition"
@@ -70,11 +70,11 @@ export default {};
 
 <style lang="scss" scoped>
 .eurekakids-landing-page .v-img {
-  transition-duration: 0.3s;
+  transition-duration: 3s;
   transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .eurekakids-landing-page .v-img:hover {
-  transform: scale(1.2);
+  transform: scale(1.5);
 }
 </style>

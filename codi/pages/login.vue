@@ -1,12 +1,27 @@
 <template>
-  <v-form @submit.prevent="login">
-    <v-text-field v-model="email" label="Adresse e-mail"></v-text-field>
+  <v-form @submit.prevent="login" align="center">
+    <v-text-field
+      v-model="email"
+      label="Adresse e-mail"
+      prepend-inner-icon="mdi-email"
+      value=""
+      outlined
+      rounded
+      height="50"
+      class="login-field"
+    ></v-text-field>
     <v-text-field
       v-model="password"
-      label="Mot de passe"
+      label="Password"
       type="password"
+      prepend-inner-icon="mdi-passport-biometric"
+      value=""
+      outlined
+      rounded
+      height="50"
+      class="login-field"
     ></v-text-field>
-    <v-btn type="submit" color="primary">Se connecter</v-btn>
+    <v-btn type="submit" color="primary">Login</v-btn>
   </v-form>
 </template>
 
@@ -37,3 +52,11 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.login-field {
+  background-color: rgb(0, 238, 255);
+  border-color: blue;
+  padding: -50px;
+  margin: 30px 20px 20px 30px;
+}
+</style>

@@ -1,8 +1,8 @@
 <template>
-  <!--<Usuari></Usuari>-->
+  <Usuari></Usuari>
   <!-- <InitPistola></InitPistola>-->
   <!--<Menu></Menu>-->
-  <Landing-Annimee></Landing-Annimee>
+  <!--<Landing-Annimee></Landing-Annimee>-->
 </template>
 
 <script>

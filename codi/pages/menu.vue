@@ -1,0 +1,170 @@
+<template>
+  <div class="d-flex flex-column menu">
+    <v-menu
+      v-for="(element, index) in elements"
+      :key="index"
+      offset-y
+      :close-on-content-click="false"
+      :nudge-right="40"
+      transition="scale-transition"
+      class="mb-5"
+      width="380"
+      height="50"
+      @click="toggleMenu(index)"
+      :class="{
+        animate__animated: animatedIndex === index,
+        animate__bounceIn: animatedIndex === index,
+      }"
+    >
+      <template v-slot:activator="{ on }">
+        <v-btn
+          color="primary"
+          class="mb-3"
+          width="400"
+          height="50"
+          dark
+          style="border-radius: 16px; color: white"
+          v-on="on"
+        >
+          {{ element.title }}
+        </v-btn>
+      </template>
+      <v-list style="border-radius: 16px">
+        <v-list-item
+          v-for="(item, subIndex) in element.items"
+          :key="subIndex"
+          @click="navigateToPage(item.page)"
+          class="list-item"
+          style="color: white"
+          ><v-list-item-content>
+            <v-list-item-title>
+              {{ item.title }}
+            </v-list-item-title>
+            <v-list-item-subtitle v-if="item.subtitle">
+              {{ item.subtitle }}
+            </v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-menu>
+    <div v-if="user">
+      <p>El nombre de usuario : {{ user.Name }}</p>
+      <p>Resultat: {{ user.Result }}</p>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  created() {
+    // Récupérez l'utilisateur à partir des paramètres de la route
+    this.user = this.$route.params.user;
+  },
+  methods: {
+    navigateToPage(menu) {
+      this.$router.push(menu);
+    },
+    toggleMenu(index) {
+      this.animatedIndex = index;
+      this.menu[index] = !this.menu[index];
+      setTimeout(() => {
+        this.animatedIndex = null;
+      }, 1000);
+    },
+  },
+  data() {
+    return {
+      menu: [false, false, false, false], // un état pour chaque bouton
+      animatedIndex: null,
+      user: {},
+      elements: [
+        {
+          title: "Preparar",
+          items: [{ title: "Picking", page: "picking_select" }],
+        },
+        {
+          title: "Expedir",
+          items: [
+            { title: "1 Expedicion", page: "" },
+            { title: "Multiples", page: "Description 6" },
+          ],
+        },
+        {
+          title: "Ubicar",
+          items: [
+            { title: "Reponer", page: "/reponer" },
+            { title: "Entradas", page: "Description 6" },
+            { title: "Reubicar", page: "Description 5" },
+            { title: "Reubicar Toynamics", page: "Description 6" },
+          ],
+        },
+        {
+          title: "Devoluciones",
+          items: [
+            { title: "Palet/Caja/Producto", page: "Description 7" },
+            { title: "Info Palet Caja", page: "Description 8" },
+            { title: "Palet/Producto/Caja", page: "Description 9" },
+            { title: "Palet/Caja", page: "Description 10" },
+          ],
+        },
+        {
+          title: "Packing",
+          items: [
+            { title: "Palet/Caja/Producto", page: "Description 7" },
+            { title: "Info Palet Caja", page: "Description 8" },
+            { title: "Palet/Producto/Caja", page: "Description 9" },
+            { title: "Palet/Caja", page: "Description 10" },
+          ],
+        },
+        {
+          title: "Pesos",
+          items: [
+            { title: "Unidad/Inner/Master", page: "Description 7" },
+            { title: "Unidad", page: "Description 8" },
+            { title: "Inner", page: "Description 9" },
+            { title: "Master", page: "Description 10" },
+          ],
+        },
+        {
+          title: "Tareas",
+          items: [{ title: "Tareas", page: "Description 7" }],
+        },
+        {
+          title: "Inventario",
+          items: [
+            { title: "Inventario", page: "Description 7" },
+            { title: "Ubic Vacias", page: "Description 8" },
+          ],
+        },
+      ],
+    };
+  },
+};
+</script>
+<style lang="scss" scoped>
+@import "assets/variables.scss";
+.menu {
+  width: 460px;
+  height: 600px;
+  max-width: 480px;
+  max-height: 800px;
+  align-content: center;
+  margin: 20px auto;
+}
+.list-item {
+  border-radius: 16px;
+  margin: 4px;
+  background-color: rgba(0, 0, 255, 0.8);
+
+  text-align: center;
+  font-size: 25px;
+}
+.list-item :hover {
+  border-radius: 16px;
+  margin: 4px;
+  background-color: rgba(0, 153, 255, 0.8);
+  color: rgb(187, 19, 202);
+  text-align: center;
+  font-size: 25px;
+}
+</style>
