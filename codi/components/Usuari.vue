@@ -59,16 +59,20 @@ export default {
             // Ouvrez la page de menu et passez les informations de l'utilisateur en tant que paramètres d'URL
             this.$router.push({
               name: "menu",
-              params: { userId: this.user.id },
+              params: { userId: this.user.ID },
             });
+            // fermer la page de recherche
+            window.close();
           } else {
             // L'utilisateur n'existe pas, ouvrez la page d'authentification initiale
 
             this.userExists = false;
             this.$router.push({ name: "initPistola" });
             console.log("el usuario no existe");
+            window.close();
           }
         })
+
         .catch((error) => {
           console.log(error);
         });

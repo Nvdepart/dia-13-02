@@ -60,6 +60,17 @@ export default {
     // Récupérez l'utilisateur à partir des paramètres de la route
     this.user = this.$route.params.user;
   },
+  // récupérer les informations de l'utilisateur à partir du userId passé en paramètre
+  /* const userId = this.$route.params.userId;
+    // faire une requête pour récupérer l'utilisateur correspondant au userId
+  //  axios.get(`/api/utilisateurs/${userId}`)
+  //    .then(response => {
+        this.utilisateur = response.data;
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  },*/
   methods: {
     navigateToPage(menu) {
       this.$router.push(menu);
