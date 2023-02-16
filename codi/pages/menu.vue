@@ -60,6 +60,7 @@ export default {
     // Récupérez l'utilisateur à partir des paramètres de la route
 
     this.user = this.$route.params.user;
+    console.log(this.user);
   },
   // récupérer les informations de l'utilisateur à partir du userId passé en paramètre
   /* const userId = this.$route.params.userId;

@@ -48,7 +48,7 @@ export default {
         // http://127.0.0.1:8080/apipda/user?user=1
         .then((response) => {
           console.log(response);
-          if (response.data) {
+          if (response.data.Result) {
             // L'utilisateur existe, récupérez les informations de l'utilisateur
             this.userExists = true;
             console.log(this.userExists);
@@ -58,7 +58,7 @@ export default {
             // Ouvrez la page de menu et passez les informations de l'utilisateur en tant que paramètres d'URL
             this.$router.push({
               name: "menu",
-              params: { userId: this.user.ID },
+              params: { user: this.user },
             });
             // fermer la page de recherche
             window.close();
@@ -67,7 +67,7 @@ export default {
 
             this.userExists = false;
             this.$router.push({ name: "initPistola" });
-            console.log("el usuario no existe");
+            alert("el usuario no existe");
             window.close();
           }
         })
