@@ -6,23 +6,43 @@
     </p>
     <div style="text-align: center">
       <v-text-field
-        id="numpda"
-        name="id"
-        value="123456"
+        id="numPda"
+        v-model="numpda"
+        name="NumPDA"
+        value="1"
         prepend-inner-icon="mdi-remote"
         outlined
         rounded
         height="50"
       ></v-text-field>
     </div>
-    <p><v-btn class="button" id="btPDA">Iniciar</v-btn></p>
+    <p>
+      <v-btn :disabled="!numpda" @click="onSubmit" class="button" id="btPDA"
+        >Iniciar</v-btn
+      >
+    </p>
   </div>
 </template>
 
 <script>
 export default {
+  methods: {
+    onSubmit() {
+      localStorage.setItem("ID", this.numpda);
+      this.$router.push({
+        name: "usuari",
+        params: {
+          id: "ID",
+          value: this.numpda,
+        },
+      });
+    },
+  },
+
   data() {
-    return {};
+    return {
+      numpda: "",
+    };
   },
 };
 </script>

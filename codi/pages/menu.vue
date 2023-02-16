@@ -47,32 +47,42 @@
         </v-list-item>
       </v-list>
     </v-menu>
-    <div v-if="user">
-      <p>El nombre de usuario : {{ user.Name }}</p>
-      <p>Resultat: {{ user.Result }}</p>
-    </div>
+    <hr />
+    <v-card
+      v-if="user"
+      style="
+        padding: 10px;
+        margin: 10px;
+        border-radius: 10%;
+        background-color: #0979b0;
+        width: 230px;
+        color: blanchedalmond;
+      "
+    >
+      <h4>Id Usuario : {{ user.ID }}</h4>
+      <p>
+        El nombre de usuario : <strong>{{ user.Name }}</strong>
+      </p>
+      <p>
+        IdPistola es: <strong>{{ idPistolaM }}</strong>
+      </p>
+    </v-card>
   </div>
 </template>
 
 <script>
 export default {
+  mounted() {
+    this.checkPda();
+    console.log("je suis charge");
+  },
   created() {
     // Récupérez l'utilisateur à partir des paramètres de la route
 
     this.user = this.$route.params.user;
     console.log(this.user);
   },
-  // récupérer les informations de l'utilisateur à partir du userId passé en paramètre
-  /* const userId = this.$route.params.userId;
-    // faire une requête pour récupérer l'utilisateur correspondant au userId
-  //  axios.get(`/api/utilisateurs/${userId}`)
-  //    .then(response => {
-        this.utilisateur = response.data;
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  },*/
+
   methods: {
     navigateToPage(page) {
       this.$router.push(page);
@@ -84,22 +94,35 @@ export default {
         this.animatedIndex = null;
       }, 1000);
     },
+    checkPda(state) {
+      let idPistola = localStorage.getItem("ID");
+      console.log("pistola " + idPistola);
+      if (idPistola == null) {
+        window.location.href = "/initPistola";
+        return false;
+      } else {
+        this.idPistolaM = idPistola;
+        console.log("je veux voir la valeur de id Pistola", this.idPistolaM);
+        return true;
+      }
+    },
   },
   data() {
     return {
-      menu: [false, false, false, false], // un état pour chaque bouton
+      menu: [false, false, false, false, false, false, false, false], // un état pour chaque bouton
       animatedIndex: null,
-      userM: {},
+      user: {},
+      idPistolaM: "",
       elements: [
         {
           title: "Preparar",
-          items: [{ title: "Picking", page: "picking_select" }],
+          items: [{ title: "Picking", page: "picking" }],
         },
         {
           title: "Expedir",
           items: [
             { title: "1 Expedicion", page: "" },
-            { title: "Multiples", page: "Description 6" },
+            { title: "Multiples", page: "" },
           ],
         },
         {

@@ -3,6 +3,7 @@
   <!-- <InitPistola></InitPistola>-->
   <!-- <Menu />-->
   <!--<Landing-Annimee></Landing-Annimee>-->
+  <!--  <Picking></Picking>-->
 </template>
 
 <script>

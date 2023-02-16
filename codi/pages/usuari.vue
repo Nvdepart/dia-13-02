@@ -10,6 +10,8 @@
         value=""
         outlined
         rounded
+        class="text-center custom-field"
+        :style="{ 'font-size': '40px' }"
         height="50"
       ></v-text-field>
     </div>
@@ -38,9 +40,27 @@ export default {
       userId: "",
       userExists: false,
       user: null,
+      idPda: "",
+      numpda: "",
     };
   },
+  mounted() {
+    this.checkPda();
+    console.log("je suis charge");
+  },
   methods: {
+    checkPda(state) {
+      let idPistola = localStorage.getItem("ID");
+      console.log("pistola " + this.idPistola);
+      if (idPistola == null) {
+        window.location.href = "/initPistola";
+        return false;
+      } else {
+        idPistola;
+        console.log("je veux voir", idPistola);
+        return true;
+      }
+    },
     checkUserExistence() {
       this.$axios
         //        .get(`http://192.168.0.181:8080/apipda/user?user=${this.userId}`)
@@ -60,6 +80,7 @@ export default {
               name: "menu",
               params: { user: this.user },
             });
+
             // fermer la page de recherche
             window.close();
           } else {
@@ -82,4 +103,15 @@ export default {
 
 <style lang="scss" scoped>
 @import "/assets/variables.scss";
+.custom-field .v-input__control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-field .v-input__control input {
+  text-align: center;
+  width: 100%;
+  border-color: black;
+}
 </style>
