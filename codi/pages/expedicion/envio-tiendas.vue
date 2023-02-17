@@ -33,14 +33,91 @@
           class="text-center custom-field"
           :style="{ 'font-size': '40px' }"
           height="80"
-        ></v-text-field
-      ></v-col>
+        ></v-text-field>
+        <v-btn
+          @click="checkPickingExistence"
+          :close-on-content-click="false"
+          class="button"
+          id="btPick"
+          >Submit</v-btn
+        >
+        <v-divider></v-divider>
+        <div v-if="pickingId">
+          <h2>Informacion de Picking {{ picking.ID }}</h2>
+          <p>Picking id: {{ pickingId }}</p>
+          <p>Pda: {{ pda }}</p>
+          <p>Msg: {{ user.Msg }}</p>
+          <p>Ubic:{{}}</p>
+        </div>
+      </v-col>
     </v-row>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      picking: null,
+    };
+  },
+  mounted() {
+    this.checkPda();
+    console.log("je suis charge avec succes");
+  },
+  methods: {
+    checkPda(state) {
+      let pda = localStorage.getItem("ID");
+      console.log("pda " + this.pda);
+      if (pda == null) {
+        window.location.href = "/initPistola";
+        return false;
+      } else {
+        pda;
+        console.log("je veux voir", pda);
+        return true;
+      }
+    },
+    checkPickingExistence() {
+      this.$axios
+        //        .get(`http://192.168.0.181:8080/apipda/findpicking?pickingid=${this.pickingId}`)
+        .get(
+          `http://127.0.0.1:8080/apipda/findpicking?pickingid=${this.pickingId}`
+        )
+        // http://127.0.0.1:8080/apipda/findpicking?pickingid=${this.pickingId}
+        .then((response) => {
+          console.log(response);
+          if (response.data.Result) {
+            // L'utilisateur existe, récupérez les informations de l'utilisateur
+            this.pickingExists = true;
+            console.log(this.pickingExists);
+            this.picking = response.data;
+            console.log(this.picking);
+
+            // Ouvrez la page de menu et passez les informations de l'utilisateur en tant que paramètres d'URL
+            this.$router.push({
+              name: "_idPicking",
+              params: { user: this.picking },
+            });
+
+            // fermer la page de recherche
+            window.close();
+          } else {
+            // L'utilisateur n'existe pas, ouvrez la page d'authentification initiale
+
+            this.pickingExists = false;
+            this.$router.push({ name: "menu" });
+            alert("el usuario no existe");
+            window.close();
+          }
+        })
+
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

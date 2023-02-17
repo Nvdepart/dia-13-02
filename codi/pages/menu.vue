@@ -182,6 +182,7 @@ export default {
 .menu {
   width: 460px;
   height: 600px;
+  font-size: 20px;
   max-width: 480px;
   max-height: 800px;
   align-content: center;

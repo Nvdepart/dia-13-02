@@ -1,5 +1,6 @@
 <template>
-  <Usuari></Usuari>
+  <Landing-Annimee></Landing-Annimee>
+  <!-- <Usuari></Usuari>-->
   <!-- <InitPistola></InitPistola>-->
   <!-- <Menu />-->
   <!--<Landing-Annimee></Landing-Annimee>-->
