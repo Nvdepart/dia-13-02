@@ -37,6 +37,7 @@
         <v-btn
           @click="checkPickingExistence()"
           :close-on-content-click="false"
+          :to="'/expedicion/' + pickingID"
           class="button"
           id="btPick"
           >Submit</v-btn
@@ -100,7 +101,7 @@ export default {
 
             // Ouvrez la page de menu et passez les informations de l'utilisateur en tant que paramètres d'URL
             this.$router.push({
-              path: "/expedicion/",
+              path: "/expedicion/idPicking",
               name: "idPicking",
               params: { user: this.picking },
             });
