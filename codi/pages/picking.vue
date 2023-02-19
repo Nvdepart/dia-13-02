@@ -1,15 +1,14 @@
 <template>
-  <div style="text-align: center; font-size: 35px">
-    <div style="padding-bottom: 50px">
+  <div style="text-align: center; font-size: 35px; padding-bottom: 50px">
+    <div>
       <h1>INDICAR PICKING</h1>
     </div>
-    <v-row align-content-sm>
-      <v-col cols="4" style="text-align: end">
+    <v-row>
+      <v-col cols="4" class="pa-4 ma-4">
         <h3>Num. :</h3>
-        <br />
         <h3>Ubic. :</h3>
       </v-col>
-      <v-col style="margin-right: 20px">
+      <v-col style="margin: auto 20px 20px 20px; padding: auto 20px">
         <v-text-field
           id="pickingId"
           name="pickingId"
@@ -17,10 +16,9 @@
           prepend-inner-icon="mdi-numeric"
           value=""
           type="number"
-          outlined
           rounded
-          :style="{ 'font-size': '40px' }"
-          height="80"
+          :style="{ 'font-size': '40px', border: '1px solid blue' }"
+          height="40"
         ></v-text-field>
         <v-text-field
           id="ubicId"
@@ -28,16 +26,13 @@
           v-model="ubicId"
           prepend-inner-icon="mdi-numeric"
           type="number"
-          outlined
           rounded
-          class="text-center custom-field"
-          :style="{ 'font-size': '40px' }"
-          height="80"
+          :style="{ 'font-size': '40px', border: '1px solid blue' }"
+          height="40"
         ></v-text-field>
         <v-btn
           @click="checkPickingExistence()"
           :close-on-content-click="false"
-          :to="'/expedicion/' + pickingID"
           class="button"
           id="btPick"
           >Submit</v-btn
@@ -60,7 +55,7 @@ export default {
   data() {
     return {
       picking: null,
-      pickingId: null,
+      pickingId: "",
       ubicId: null,
       pda: "",
     };
@@ -97,13 +92,15 @@ export default {
             this.pickingExists = true;
             console.log(this.pickingExists);
             this.picking = response.data;
-            console.log(this.picking);
+            console.log("le numero de reference est ", this.picking);
+            console.log("le Idpicking est", this.pickingId);
+            let pickingIdVue = parseInt("this.pickingId");
+            console.log("le IdVue est", this.pickingIdVue);
 
             // Ouvrez la page de menu et passez les informations de l'utilisateur en tant que paramètres d'URL
             this.$router.push({
-              path: "/expedicion/idPicking",
-              name: "idPicking",
-              params: { user: this.picking },
+              path: `/expedicion/_pickingIdVue`,
+              params: { picking: this.pickingIdVue },
             });
 
             // fermer la page de recherche
@@ -128,15 +125,4 @@ export default {
 
 <style lang="scss" scoped>
 @import "/assets/variables.scss";
-.custom-field .v-input__control {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.custom-field .v-input__control input {
-  text-align: center;
-  width: 100%;
-  border-color: black;
-}
 </style>

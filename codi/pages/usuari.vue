@@ -8,20 +8,23 @@
         v-model="userId"
         prepend-inner-icon="mdi-account"
         value=""
-        outlined
         rounded
         class="text-center custom-field"
-        :style="{ 'font-size': '40px' }"
+        :style="{ 'font-size': '40px', border: '2px solid blue' }"
         height="50"
       ></v-text-field>
     </div>
-    <v-btn
-      @click="checkUserExistence"
-      :close-on-content-click="false"
-      class="button"
-      id="btUsu"
-      >Iniciar</v-btn
-    >
+    <br />
+
+    <div id="divcenter">
+      <v-btn
+        @click="checkUserExistence"
+        :close-on-content-click="false"
+        class="button"
+        id="btUsu"
+        >Iniciar
+      </v-btn>
+    </div>
     <br />
     <div v-if="user">
       <h2>Informacion de usuario {{ user.ID }}</h2>
