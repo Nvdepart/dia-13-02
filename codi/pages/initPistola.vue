@@ -11,31 +11,30 @@
         name="NumPDA"
         value="1"
         prepend-inner-icon="mdi-remote"
-        outlined
         rounded
+        style="border: 2px solid blue"
         height="50"
+        ref="textField2"
+        @keyup.enter="sendDataToServer"
       ></v-text-field>
     </div>
-    <p>
-      <v-btn :disabled="!numpda" @click="onSubmit" class="button" id="btPDA"
-        >Iniciar</v-btn
-      >
-    </p>
   </div>
 </template>
 
 <script>
 export default {
   methods: {
-    onSubmit() {
-      localStorage.setItem("ID", this.numpda);
-      this.$router.push({
-        name: "usuari",
-        params: {
-          id: "ID",
-          value: this.numpda,
-        },
-      });
+    sendDataToServer() {
+      if (this.numpda) {
+        localStorage.setItem("ID", this.numpda);
+        this.$router.push({
+          name: "usuari",
+          params: {
+            id: "ID",
+            value: this.numpda,
+          },
+        });
+      }
     },
   },
 

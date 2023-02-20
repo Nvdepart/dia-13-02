@@ -7,9 +7,9 @@
       :close-on-content-click="false"
       :nudge-right="40"
       transition="scale-transition"
-      class="mb-5"
       width="380"
-      height="50"
+      height="100"
+      class="mb-5"
       @click="toggleMenu(index)"
       :class="{
         animate__animated: animatedIndex === index,
@@ -20,10 +20,10 @@
         <v-btn
           color="primary"
           class="mb-3"
-          width="400"
-          height="50"
+          width="380"
+          height="70"
           dark
-          style="border-radius: 16px; color: white"
+          style="border-radius: 16px; color: white; font-size: 30px"
           v-on="on"
         >
           {{ element.title }}
@@ -37,7 +37,7 @@
           class="list-item"
           style="color: white"
           ><v-list-item-content>
-            <v-list-item-title>
+            <v-list-item-title style="font-size: 30px">
               {{ item.title }}
             </v-list-item-title>
             <v-list-item-subtitle v-if="item.subtitle">
@@ -48,17 +48,7 @@
       </v-list>
     </v-menu>
     <hr />
-    <v-card
-      v-if="user"
-      style="
-        padding: 10px;
-        margin: 10px;
-        border-radius: 10%;
-        background-color: #0979b0;
-        width: 230px;
-        color: blanchedalmond;
-      "
-    >
+    <div v-if="user" class="cardiv">
       <h4>Id Usuario : {{ user.ID }}</h4>
       <p>
         El nombre de usuario : <strong>{{ user.Name }}</strong>
@@ -66,7 +56,7 @@
       <p>
         IdPistola es: <strong>{{ idPistolaM }}</strong>
       </p>
-    </v-card>
+    </div>
   </div>
 </template>
 
@@ -181,8 +171,7 @@ export default {
 @import "assets/variables.scss";
 .menu {
   width: 460px;
-  height: 600px;
-  font-size: 20px;
+  height: 800px;
   max-width: 480px;
   max-height: 800px;
   align-content: center;
@@ -192,9 +181,8 @@ export default {
   border-radius: 16px;
   margin: 4px;
   background-color: rgba(0, 0, 255, 0.8);
-
   text-align: center;
-  font-size: 25px;
+  font-size: 100px;
 }
 .list-item :hover {
   border-radius: 16px;
@@ -202,6 +190,14 @@ export default {
   background-color: rgba(0, 153, 255, 0.8);
   color: rgb(187, 19, 202);
   text-align: center;
-  font-size: 25px;
+  font-size: 40px;
+}
+.cardiv {
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10%;
+  background-color: rgb(0, 153, 255);
+  width: 230px;
+  color: blanchedalmond;
 }
 </style>

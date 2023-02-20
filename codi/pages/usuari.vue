@@ -12,6 +12,8 @@
         class="text-center custom-field"
         :style="{ 'font-size': '40px', border: '2px solid blue' }"
         height="50"
+        ref="textField2"
+        @keyup.enter="sendDataToServer"
       ></v-text-field>
     </div>
     <br />
@@ -99,6 +101,16 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+    sendDataToServer() {
+      if (this.userId) {
+        // envoyer les données au serveur
+        this.checkUserExistence();
+        console.log("Envoi de données au serveur:", this.userId);
+
+        // Réinitialiser les valeurs des champs de texte
+        this.userId = "";
+      }
     },
   },
 };

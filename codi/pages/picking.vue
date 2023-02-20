@@ -19,6 +19,7 @@
           rounded
           :style="{ 'font-size': '40px', border: '1px solid blue' }"
           height="40"
+          @keyup.enter="focusTextField2"
         ></v-text-field>
         <v-text-field
           id="ubicId"
@@ -29,6 +30,8 @@
           rounded
           :style="{ 'font-size': '40px', border: '1px solid blue' }"
           height="40"
+          ref="textField2"
+          @keyup.enter="sendDataToServer"
         ></v-text-field>
         <v-btn
           @click="checkPickingExistence()"
@@ -56,7 +59,7 @@ export default {
     return {
       picking: null,
       pickingId: "",
-      ubicId: null,
+      ubicId: "",
       pda: "",
     };
   },
@@ -86,22 +89,27 @@ export default {
         )
         // http://127.0.0.1:8080/apipda/findpicking?pickingid=${this.pickingId}
         .then((response) => {
-          console.log(response);
+          console.log(
+            "el numero de picking se ha encontrado",
+            response.data.Result
+          );
           if (response.data.Result) {
             // L'utilisateur existe, récupérez les informations de l'utilisateur
-            this.pickingExists = true;
-            console.log(this.pickingExists);
-            this.picking = response.data;
-            console.log("le numero de reference est ", this.picking);
-            console.log("le Idpicking est", this.pickingId);
-            let pickingIdVue = parseInt("this.pickingId");
-            console.log("le IdVue est", this.pickingIdVue);
+            let self = this;
+            self.pickingExists = true;
+            console.log(self.pickingExists);
+            self.picking = response.data;
+            console.log("le numero de reference est ", self.picking);
+            console.log("le Idpicking est en la funcion", self.pickingId);
+
+            console.log("estoy esperando", self.pickingId);
 
             // Ouvrez la page de menu et passez les informations de l'utilisateur en tant que paramètres d'URL
             this.$router.push({
-              path: `/expedicion/_pickingIdVue`,
-              params: { picking: this.pickingIdVue },
+              path: `/expedicion/${self.pickingId}`,
+              params: { IdPiking: self.pickingId },
             });
+            console.log("estoy esperando despues", self.pickingId);
 
             // fermer la page de recherche
             window.close();
@@ -118,6 +126,24 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+    focusTextField2() {
+      this.$refs.textField2.focus();
+    },
+    sendDataToServer() {
+      if (this.pickingId && this.ubicId) {
+        // envoyer les données au serveur
+        this.checkPickingExistence();
+        console.log(
+          "Envoi de données au serveur:",
+          this.pickingId,
+          this.ubicId
+        );
+
+        // Réinitialiser les valeurs des champs de texte
+        /* this.pickingId = "";
+        this.ubicId = ""; */
+      }
     },
   },
 };
