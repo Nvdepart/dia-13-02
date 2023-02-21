@@ -111,14 +111,14 @@ export default {
         {
           title: "Expedir",
           items: [
-            { title: "1 Expedicion", page: "" },
-            { title: "Multiples", page: "" },
+            { title: "1 Expedicion", page: "facturacion/expedicion1" },
+            { title: "Multiples", page: "facturacion/multiples" },
           ],
         },
         {
           title: "Ubicar",
           items: [
-            { title: "Reponer", page: "/reponer" },
+            { title: "Reponer", page: "ubicar/reponer" },
             { title: "Entradas", page: "Description 6" },
             { title: "Reubicar", page: "Description 5" },
             { title: "Reubicar Toynamics", page: "Description 6" },
