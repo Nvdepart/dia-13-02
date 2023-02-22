@@ -1,31 +1,23 @@
 <template>
   <div class="centered pa-4 ma-2">
     <div>
-      <h1>Entradas</h1>
+      <h1>Envio Pedido TIENDAS</h1>
       <br />
-      <div>
-        <v-row>
-          <v-col cols="4" class="leftlabel pa-0 ma-0">
-            <h1>Nombre :</h1>
-          </v-col>
-          <v-col
-            cols="8"
-            :style="{
-              'font-size': '25px',
-            }"
-          >
-            <h1>Nombre</h1>
-          </v-col>
-        </v-row>
-      </div>
+
       <div class="leftdiv">
         <v-row>
-          <v-col cols="4" class="leftlabel pa-0 ma-0">
-            <h1>Entrega</h1>
+          <v-col cols="4">
+            <v-subheader
+              :style="{
+                'font-size': '35px',
+                width: '250px',
+              }"
+              >Mesa :</v-subheader
+            >
           </v-col>
           <v-col cols="8">
             <v-text-field
-              label=""
+              label="ID"
               value=""
               rounded
               :style="{
@@ -36,6 +28,8 @@
               type="number"
               v-model="textField1"
               @keyup.enter="focusTextField('textField2')"
+              @keydown.up.prevent="getPreviousExpedID()"
+              @keydown.down.prevent="getNextExpedID()"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -43,8 +37,14 @@
 
       <div class="leftdiv">
         <v-row>
-          <v-col cols="4" class="leftlabel pa-0 ma-0">
-            <h1>Referencia</h1>
+          <v-col cols="4">
+            <v-subheader
+              :style="{
+                'font-size': '35px',
+                width: '250px',
+              }"
+              >Pedido :</v-subheader
+            >
           </v-col>
           <br />
           <v-col cols="8">
@@ -68,31 +68,14 @@
 
       <div class="leftdiv">
         <v-row>
-          <v-col cols="4" class="leftlabel pa-0 ma-0">
-            <h1>Ubic</h1>
-          </v-col>
-          <v-col cols="8">
-            <v-text-field
-              label=""
-              value=""
-              rounded
+          <v-col cols="4">
+            <v-subheader
               :style="{
-                'font-size': '40px',
+                'font-size': '35px',
                 width: '250px',
-                border: '2px solid blue',
               }"
-              type="number"
-              v-model="textField3"
-              ref="textField3"
-              @keyup.enter="sendDataToServer"
-            ></v-text-field>
-          </v-col>
-        </v-row>
-      </div>
-      <div class="leftdiv">
-        <v-row>
-          <v-col cols="4" class="leftlabel pa-0 ma-0">
-            <h1>Cantidad</h1>
+              >Bultor :</v-subheader
+            >
           </v-col>
           <v-col cols="8">
             <v-text-field
@@ -138,33 +121,6 @@
         </tbody>
       </table>
     </div>
-    <!-- <div v-if="NoShipped">
-      <h1 style="font-size: 20px">La liste des Pedidos NoShipped</h1>
-      <v-data-table
-        :headers="headers"
-        :items="NoShipped"
-        :items-per-page="5"
-        style="background-color: transparent; color: darkblue"
-        class="my-table"
-      >
-        <template v-slot:header="{ props }">
-          <thead>
-            <tr>
-              <th v-for="header in props.headers" :key="header.text"></th>
-            </tr>
-          </thead>
-        </template>
-        <template v-slot:items="props">
-          <tbody>
-            <tr v-for="(element, index) in props.items" :key="index">
-              <td>{{ element.ExpedId }}</td>
-              <td>{{ element.Shop }}</td>
-              <td>{{ element.Order }}</td>
-            </tr>
-          </tbody>
-        </template>
-      </v-data-table>
-    </div> -->
   </div>
 </template>
 
@@ -174,6 +130,27 @@ export default {
     this.checkPickingExistence();
   },
   methods: {
+    getPreviousExpedID() {
+      if (this.NoShipped.length > 0) {
+        const index = this.NoShipped.findIndex(
+          (element) => element.ExpedId === this.ExpedID
+        );
+        if (index > 0) {
+          this.ExpedID = this.NoShipped[index - 1].ExpedId;
+        }
+      }
+    },
+
+    getNextExpedID() {
+      if (this.NoShipped.length > 0) {
+        const index = this.NoShipped.findIndex(
+          (element) => element.ExpedId === this.ExpedID
+        );
+        if (index >= 0 && index < this.NoShipped.length - 1) {
+          this.ExpedID = this.NoShipped[index + 1].ExpedId;
+        }
+      }
+    },
     checkPickingExistence() {
       this.$axios
         //        .get(`http://192.168.0.181:8080/apipda/findpicking?pickingid=9876543&pda=1&user=1&ubicacio=00`)
@@ -227,6 +204,43 @@ export default {
         this.textField3 = "";
       }
     },
+    handleUpDownKeys(event, ref) {
+      if (event.keyCode === 38) {
+        // Up arrow key
+        if (this.NoShipped.length === 0) {
+          return;
+        }
+        const currentExpedId = this.$refs[ref].value;
+        const currentIndex = this.NoShipped.findIndex(
+          (el) => el.ExpedId === currentExpedId
+        );
+        let newExpedId;
+        if (currentIndex === -1 || currentIndex === 0) {
+          newExpedId = this.NoShipped[this.NoShipped.length - 1].ExpedId;
+        } else {
+          newExpedId = this.NoShipped[currentIndex - 1].ExpedId;
+        }
+        this.$refs[ref].value = newExpedId;
+        this.textField1 = newExpedId;
+      } else if (event.keyCode === 40) {
+        // Down arrow key
+        if (this.NoShipped.length === 0) {
+          return;
+        }
+        const currentExpedId = this.$refs[ref].value;
+        const currentIndex = this.NoShipped.findIndex(
+          (el) => el.ExpedId === currentExpedId
+        );
+        let newExpedId;
+        if (currentIndex === -1 || currentIndex === this.NoShipped.length - 1) {
+          newExpedId = this.NoShipped[0].ExpedId;
+        } else {
+          newExpedId = this.NoShipped[currentIndex + 1].ExpedId;
+        }
+        this.$refs[ref].value = newExpedId;
+        this.textField1 = newExpedId;
+      }
+    },
   },
   data() {
     return {
@@ -235,6 +249,7 @@ export default {
       textField1: "",
       textField2: "",
       textField3: "",
+      ExpedID: "",
       headers: [
         { text: "ExpedId", value: "ExpedId" },
         { text: "Shop", value: "Shop" },
@@ -259,14 +274,6 @@ export default {
   justify-content: flex;
   align-items: center;
   text-align: left;
-}
-.leftlabel {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex;
-  align-items: center;
-  text-align: left;
-  font-size: 18px;
 }
 .rounded-number {
   height: 300px;

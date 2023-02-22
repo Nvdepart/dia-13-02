@@ -1,0 +1,33 @@
+{
+  [
+  {
+    "albaran": [
+      {
+        "reference": [
+          {
+            "ubication": [null, null, null, null, null],
+            "stock": null,
+            "toy": null,
+            "total": null
+          },
+          {
+            "ubication": [null, null, null, null, null],
+            "stock": null,
+            "toy": null,
+            "total": null
+          }
+          // 5 autres références avec les mêmes champs
+        ],
+        "nom": null,
+        "couleur": null,
+        "quantite": null
+      }
+      // 3 autres albarans avec les mêmes champs
+    ],
+    "produit": null,
+    "linea": null,
+    "quantite": null
+  }
+  // 9 autres éléments Entredas avec les mêmes champs
+]
+}
