@@ -119,7 +119,7 @@ export default {
           title: "Ubicar",
           items: [
             { title: "Reponer", page: "ubicar/reponer" },
-            { title: "Entradas", page: "Description 6" },
+            { title: "Entradas", page: "ubicar/entradas" },
             { title: "Reubicar", page: "Description 5" },
             { title: "Reubicar Toynamics", page: "Description 6" },
           ],

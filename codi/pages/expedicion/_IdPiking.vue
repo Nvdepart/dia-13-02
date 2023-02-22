@@ -46,8 +46,9 @@
             border: '2px solid blue',
           }"
           height="60"
+          ref="textField1"
           v-model="textField1"
-          @keyup.enter="focusTextField2"
+          @keyup.enter="focusTextField('textField2')"
         ></v-text-field>
 
         <br />
@@ -100,8 +101,8 @@ export default {
           console.log(error);
         });
     },
-    focusTextField2() {
-      this.$refs.textField2.focus();
+    focusTextField(ref) {
+      this.$refs[ref].focus();
     },
     sendDataToServer() {
       if (this.textField1 && this.textField2) {
@@ -111,7 +112,7 @@ export default {
           this.textField1,
           this.textField2
         );
-
+        this.focusTextField("textField1");
         // Réinitialiser les valeurs des champs de texte
         this.textField1 = "";
         this.textField2 = "";
