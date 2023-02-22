@@ -3,7 +3,17 @@
     <div>
       <h1>Envio Pedido TIENDAS</h1>
       <br />
-
+      <v-select
+        v-model="ExpedId"
+        :items="NoShipped"
+        item-value="ExpedId"
+        item-text="ExpedId"
+        label="ExpedId"
+        outlined
+        dense
+        @keydown.up.prevent="previousOption"
+        @keydown.down.prevent="nextOption"
+      ></v-select>
       <div class="leftdiv">
         <v-row>
           <v-col cols="4">
@@ -130,6 +140,30 @@ export default {
     this.checkPickingExistence();
   },
   methods: {
+    previousOption() {
+      if (this.NoShipped.length && this.ExpedId !== null) {
+        const index = this.NoShipped.findIndex(
+          (item) => item.ExpedId === this.ExpedId
+        );
+        if (index > 0) {
+          this.ExpedId = this.NoShipped[index - 1].ExpedId;
+        } else {
+          this.ExpedId = this.NoShipped[this.NoShipped.length - 1].ExpedId;
+        }
+      }
+    },
+    nextOption() {
+      if (this.NoShipped.length && this.ExpedId !== null) {
+        const index = this.NoShipped.findIndex(
+          (item) => item.ExpedId === this.ExpedId
+        );
+        if (index < this.NoShipped.length - 1) {
+          this.ExpedId = this.NoShipped[index + 1].ExpedId;
+        } else {
+          this.ExpedId = this.NoShipped[0].ExpedId;
+        }
+      }
+    },
     getPreviousExpedID() {
       if (this.NoShipped.length > 0) {
         const index = this.NoShipped.findIndex(
@@ -179,12 +213,6 @@ export default {
     focusTextField(ref) {
       this.$refs[ref].focus();
     },
-    /* focusTextField2() {
-      this.$refs.textField2.focus();
-    },
-    focusTextField3() {
-      this.$refs.textField3.focus();
-    }, */
 
     sendDataToServer() {
       if (this.textField1 && this.textField2) {
