@@ -29,7 +29,7 @@
           >
             <h1>Entrega</h1>
           </v-col>
-          <v-col cols="8" v-if="reception">
+          <v-col cols="8">
             <v-combobox
               v-model="selectedAlbaran"
               :items="albarans"
@@ -60,10 +60,11 @@
           >
             <h1>Ref :</h1>
           </v-col>
-          <v-col cols="8" v-if="reception">
+          <v-col cols="8">
             <v-combobox
+              v-if="references.length"
               v-model="selectedReference"
-              :items="referenceItems"
+              :items="references"
               label="Select Reference"
               rounded
               :style="{
@@ -74,7 +75,7 @@
               }"
               @keydown.up.prevent="previousOption"
               @keydown.down.prevent="nextOption"
-              @change="moveToNextCombobox"
+              @change="filterDataByReference"
               @keydown.enter="moveToNextCombobox"
               ref="combobox2"
             ></v-combobox>
@@ -82,7 +83,7 @@
         </v-row>
       </div>
 
-      <div>
+      <!-- <div>
         <v-row>
           <v-col
             cols="4"
@@ -139,7 +140,7 @@
             ></v-text-field>
           </v-col>
         </v-row>
-      </div>
+      </div> -->
       <br />
       <div v-if="state">
         <h1 style="font-size: 30px; background-color: green">
@@ -147,18 +148,18 @@
         </h1>
       </div>
     </div>
-    <div v-if="reception">
-      <h1 style="font-size: 20px">La liste des Pedidos de Reception</h1>
-      <table class="my-table" v-if="reception">
+    <div v-if="tableData">
+      <h1 style="font-size: 20px">La liste des Pedidos de tableData</h1>
+      <table class="my-table" v-if="tableData">
         <thead>
           <tr>
-            <th v-for="(header, index) in reception.Headers" :key="index">
+            <th v-for="(header, index) in headers" :key="index">
               {{ header }}
             </th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(row, index) in reception.Data" :key="index">
+          <tr v-for="(row, index) in dataFiltered" :key="index">
             <td v-for="(cell, key) in row" :key="key">{{ cell }}</td>
           </tr>
         </tbody>
@@ -170,38 +171,46 @@
 <script>
 export default {
   computed: {
-    albarans() {
-      // get unique albarans from data
-      const albarans = new Set();
-      this.reception.Data.forEach((row) => albarans.add(row.C1));
-      return Array.from(albarans);
+    dataFiltered() {
+      if (this.selectedReference) {
+        return this.tableData.filter(
+          (item) => item.C2 === this.selectedReference
+        );
+      } else {
+        return this.tableData;
+      }
     },
   },
-  mounted() {
-    this.checkPickingExistence();
+  async created() {
+    const response = await this.$axios.get(
+      "http://127.0.0.1:8080/apipda/doreception?reception=000&user=1&pda=1&referencia=1301515&cantidad=24"
+    );
+    this.tableData = response.data.Data;
+    console.log("la premiere table", this.tableData);
+    this.albarans = this.tableData.map((item) => item.C1);
   },
   methods: {
     previousOption() {
-      if (this.reception.length && this.ExpedId !== null) {
-        const index = this.reception.findIndex(
-          (item) => item.ExpedId === this.ExpedId
+      if (this.tableData.length && this.albarans !== null) {
+        const index = this.tableData.findIndex(
+          (item) => item.albarans === this.albarans
         );
         if (index > 0) {
-          this.ExpedId = this.reception[index - 1].ExpedId;
+          this.albarans = this.tableData[index - 1].albarans;
         } else {
-          this.ExpedId = this.reception[this.reception.length - 1].ExpedId;
+          this.albarans = this.tableData[this.tableData.length - 1].albarans;
         }
       }
     },
     nextOption() {
-      if (this.reception.length && this.ExpedId !== null) {
-        const index = this.reception.findIndex(
-          (item) => item.ExpedId === this.ExpedId
+      if (this.tableData.length && this.albarans !== null) {
+        const index = this.tableData.findIndex(
+          (item) => item.albarans === this.albarans
         );
-        if (index < this.reception.length - 1) {
-          this.ExpedId = this.reception[index + 1].ExpedId;
+        if (index < this.tableData.length - 1) {
+          this.albarans = this.tableData[index + 1].albarans;
         } else {
-          this.ExpedId = this.reception[0].ExpedId;
+          this.albarans = this.tableData[0].albarans;
         }
       }
     },
@@ -209,50 +218,26 @@ export default {
       this.$nextTick(() => {
         if (this.$refs.combobox1.focused) {
           this.$refs.combobox2.focus();
-        } else if (this.$refs.combobox2.focused) {
-          this.$refs.combobox3.focus();
-        } else if (this.$refs.combobox3.focused) {
+          // } else if (this.$refs.combobox2.focused) {
+          //   this.$refs.combobox3.focus();
+          // } else if (this.$refs.combobox3.focused) {
           this.$refs.vTextField3.focus();
         }
       });
     },
 
-    checkPickingExistence() {
-      this.$axios
-        //        .get(`http://192.168.0.181:8080/apipda/findpicking?pickingid=9876543&pda=1&user=1&ubicacio=00`)
-        .get(
-          `http://127.0.0.1:8080/apipda/doreception?reception=000&user=1&pda=1&referencia=1301515&cantidad=24`
-        )
-        // http://127.0.0.1:8080/apipda/findpicking?pickingid=${this.pickingId}
-        .then((response) => {
-          console.log(
-            "el numero de shipping se ha encontrado",
-            response.data.Result
-          );
-          if (response.data.Result) {
-            // L'utilisateur existe, récupérez les informations de l'utilisateur
-            let self = this;
-            self.receptionExists = true;
-            console.log(self.receptionExists);
-            self.reception = response.data;
-            console.log("le contenu est ", self.reception.Data.C3);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
     async loadReferenceData() {
-      try {
-        const response = await this.$axios.get(
-          `http://127.0.0.1:8080/apipda/doreception?reception=123&user=1&pda=1&referencia=1301515&cantidad=24`
-        );
-        this.referenceData = response.data;
-        console.log("le contenu avec la Reference est ", this.referenceData);
-      } catch (error) {
-        console.error(error);
-      }
+      const response = await this.$axios.get(
+        `http://127.0.0.1:8080/apipda/doreception?reception=123&user=1&pda=1&albaran=${this.selectedAlbaran}&cantidad=24`
+      );
+      this.tableData = response.data.Data;
+      this.references = [...new Set(this.tableData.map((item) => item.C2))];
+      this.selectedReference = "";
     },
+    filterDataByReference() {
+      this.tableData = this.dataFiltered;
+    },
+
     focusTextField(ref) {
       this.$refs[ref].focus();
     },
@@ -313,14 +298,14 @@ export default {
   },
   data() {
     return {
-      reception: null,
+      albarans: [],
+      references: [],
       state: false,
       textField3: "",
-      ExpedID: "",
-      headers: "",
+      headers: ["ALBARAN", "PROVEEDOR", "LINEAS", "CANTIDAD"],
       selectedAlbaran: null,
       selectedReference: null,
-      referenceItems: null,
+      tableData: [],
     };
   },
 };
@@ -364,6 +349,7 @@ export default {
 }
 .my-table {
   width: 100%;
+  max-width: 460px;
   border-collapse: collapse;
   text-align: center;
   justify-content: center;
@@ -372,8 +358,8 @@ export default {
 .my-table th,
 .my-table td {
   text-align: left;
-  padding: 0px 40px 0px 20px;
-  font-size: 30px;
+  padding: 0px 10px 0px 10px;
+  font-size: 20px;
 }
 
 .my-table th {
