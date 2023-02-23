@@ -1,7 +1,7 @@
 <template>
   <div class="div0 pa-2 ma-2">
     <div class="centered pa-0 ma-0">
-      <h1 style="font-size: 50px">Ubicar Pedido</h1>
+      <h1 style="font-size: 50px">Mensage</h1>
       <br />
       <div>
         <v-row>
@@ -42,7 +42,7 @@
             :style="{ 'font-size': '18px' }"
             class="leftdiv pa-0 ma-0"
           >
-            <h1>Ubic :</h1>
+            <h1>Req :</h1>
           </v-col>
           <br />
           <v-col
@@ -51,7 +51,7 @@
               'font-size': '25px',
             }"
           >
-            <h1>Ubic</h1>
+            <h1>Cantidad</h1>
           </v-col>
         </v-row>
       </div>
@@ -64,7 +64,7 @@
             }"
             class="leftdiv pa-0 ma-0"
           >
-            <h1>Grande :</h1>
+            <h1>2ª</h1>
           </v-col>
           <v-col cols="8">
             <v-text-field
@@ -93,7 +93,7 @@
             }"
             class="leftdiv pa-0 ma-0"
           >
-            <h1>Pequiño :</h1>
+            <h1>1ª</h1>
           </v-col>
           <v-col cols="8">
             <v-text-field
@@ -122,7 +122,7 @@
             }"
             class="leftdiv pa-0 ma-0"
           >
-            <h1>Palets:</h1>
+            <h1>Total</h1>
           </v-col>
           <v-col cols="8">
             <v-text-field
@@ -145,7 +145,7 @@
       <br />
       <div v-if="state">
         <h1 style="font-size: 30px; background-color: green">
-          <span style="color: yellow">El pedido se ha enviado</span>
+          <span style="color: yellow">Cantidad en 1ª</span>
         </h1>
       </div>
     </div>
