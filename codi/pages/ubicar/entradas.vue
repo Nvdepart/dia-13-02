@@ -29,11 +29,11 @@
           >
             <h1>Entrega</h1>
           </v-col>
-          <v-col cols="8">
+          <v-col cols="8" v-if="reception">
             <v-combobox
-              :items="NoShipped"
-              item-value="ExpedId"
-              item-text="ExpedId"
+              v-model="selectedAlbaran"
+              :items="albarans"
+              label="Select Albaran"
               rounded
               :style="{
                 'font-size': '40px',
@@ -43,7 +43,7 @@
               }"
               @keydown.up.prevent="previousOption"
               @keydown.down.prevent="nextOption"
-              @change="moveToNextCombobox"
+              @change="loadReferenceData"
               @keydown.enter="moveToNextCombobox"
               ref="combobox1"
             ></v-combobox>
@@ -60,11 +60,11 @@
           >
             <h1>Ref :</h1>
           </v-col>
-          <v-col cols="8">
+          <v-col cols="8" v-if="reception">
             <v-combobox
-              :items="NoShipped"
-              item-value="ExpedId"
-              item-text="ExpedId"
+              v-model="selectedReference"
+              :items="referenceItems"
+              label="Select Reference"
               rounded
               :style="{
                 'font-size': '40px',
@@ -91,11 +91,11 @@
           >
             <h1>Ubic :</h1>
           </v-col>
-          <v-col cols="8">
+          <v-col cols="8" v-if="reception">
             <v-combobox
-              :items="NoShipped"
-              item-value="ExpedId"
-              item-text="ExpedId"
+              :items="reception.Data"
+              item-value="reception.Data.C1"
+              item-text="reception.Data.C1"
               rounded
               :style="{
                 'font-size': '40px',
@@ -147,21 +147,19 @@
         </h1>
       </div>
     </div>
-    <div v-if="NoShipped">
-      <h1 style="font-size: 20px">La liste des Pedidos NoShipped</h1>
-      <table class="my-table">
+    <div v-if="reception">
+      <h1 style="font-size: 20px">La liste des Pedidos de Reception</h1>
+      <table class="my-table" v-if="reception">
         <thead>
           <tr>
-            <th>ExpedId</th>
-            <th>Shop</th>
-            <th>Order</th>
+            <th v-for="(header, index) in reception.Headers" :key="index">
+              {{ header }}
+            </th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(element, index) in NoShipped" :key="index">
-            <td>{{ element.ExpedId }}</td>
-            <td>{{ element.Shop }}</td>
-            <td>{{ element.Order }}</td>
+          <tr v-for="(row, index) in reception.Data" :key="index">
+            <td v-for="(cell, key) in row" :key="key">{{ cell }}</td>
           </tr>
         </tbody>
       </table>
@@ -171,31 +169,39 @@
 
 <script>
 export default {
+  computed: {
+    albarans() {
+      // get unique albarans from data
+      const albarans = new Set();
+      this.reception.Data.forEach((row) => albarans.add(row.C1));
+      return Array.from(albarans);
+    },
+  },
   mounted() {
     this.checkPickingExistence();
   },
   methods: {
     previousOption() {
-      if (this.NoShipped.length && this.ExpedId !== null) {
-        const index = this.NoShipped.findIndex(
+      if (this.reception.length && this.ExpedId !== null) {
+        const index = this.reception.findIndex(
           (item) => item.ExpedId === this.ExpedId
         );
         if (index > 0) {
-          this.ExpedId = this.NoShipped[index - 1].ExpedId;
+          this.ExpedId = this.reception[index - 1].ExpedId;
         } else {
-          this.ExpedId = this.NoShipped[this.NoShipped.length - 1].ExpedId;
+          this.ExpedId = this.reception[this.reception.length - 1].ExpedId;
         }
       }
     },
     nextOption() {
-      if (this.NoShipped.length && this.ExpedId !== null) {
-        const index = this.NoShipped.findIndex(
+      if (this.reception.length && this.ExpedId !== null) {
+        const index = this.reception.findIndex(
           (item) => item.ExpedId === this.ExpedId
         );
-        if (index < this.NoShipped.length - 1) {
-          this.ExpedId = this.NoShipped[index + 1].ExpedId;
+        if (index < this.reception.length - 1) {
+          this.ExpedId = this.reception[index + 1].ExpedId;
         } else {
-          this.ExpedId = this.NoShipped[0].ExpedId;
+          this.ExpedId = this.reception[0].ExpedId;
         }
       }
     },
@@ -215,7 +221,7 @@ export default {
       this.$axios
         //        .get(`http://192.168.0.181:8080/apipda/findpicking?pickingid=9876543&pda=1&user=1&ubicacio=00`)
         .get(
-          `http://127.0.0.1:8080/apipda/doshippingweb?shippingid=9876543&pda=1&user=1&box=2`
+          `http://127.0.0.1:8080/apipda/doreception?reception=000&user=1&pda=1&referencia=1301515&cantidad=24`
         )
         // http://127.0.0.1:8080/apipda/findpicking?pickingid=${this.pickingId}
         .then((response) => {
@@ -226,15 +232,26 @@ export default {
           if (response.data.Result) {
             // L'utilisateur existe, récupérez les informations de l'utilisateur
             let self = this;
-            self.pickingExists = true;
-            console.log(self.pickingExists);
-            self.NoShipped = response.data.NoShipped;
-            console.log("le numero de reference est ", self.NoShipped);
+            self.receptionExists = true;
+            console.log(self.receptionExists);
+            self.reception = response.data;
+            console.log("le contenu est ", self.reception.Data.C3);
           }
         })
         .catch((error) => {
           console.log(error);
         });
+    },
+    async loadReferenceData() {
+      try {
+        const response = await this.$axios.get(
+          `http://127.0.0.1:8080/apipda/doreception?reception=123&user=1&pda=1&referencia=1301515&cantidad=24`
+        );
+        this.referenceData = response.data;
+        console.log("le contenu avec la Reference est ", this.referenceData);
+      } catch (error) {
+        console.error(error);
+      }
     },
     focusTextField(ref) {
       this.$refs[ref].focus();
@@ -259,35 +276,35 @@ export default {
     handleUpDownKeys(event, ref) {
       if (event.keyCode === 38) {
         // Up arrow key
-        if (this.NoShipped.length === 0) {
+        if (this.reception.length === 0) {
           return;
         }
         const currentExpedId = this.$refs[ref].value;
-        const currentIndex = this.NoShipped.findIndex(
+        const currentIndex = this.reception.findIndex(
           (el) => el.ExpedId === currentExpedId
         );
         let newExpedId;
         if (currentIndex === -1 || currentIndex === 0) {
-          newExpedId = this.NoShipped[this.NoShipped.length - 1].ExpedId;
+          newExpedId = this.reception[this.reception.length - 1].ExpedId;
         } else {
-          newExpedId = this.NoShipped[currentIndex - 1].ExpedId;
+          newExpedId = this.reception[currentIndex - 1].ExpedId;
         }
         this.$refs[ref].value = newExpedId;
         this.textField3 = newExpedId;
       } else if (event.keyCode === 40) {
         // Down arrow key
-        if (this.NoShipped.length === 0) {
+        if (this.reception.length === 0) {
           return;
         }
         const currentExpedId = this.$refs[ref].value;
-        const currentIndex = this.NoShipped.findIndex(
+        const currentIndex = this.reception.findIndex(
           (el) => el.ExpedId === currentExpedId
         );
         let newExpedId;
-        if (currentIndex === -1 || currentIndex === this.NoShipped.length - 1) {
-          newExpedId = this.NoShipped[0].ExpedId;
+        if (currentIndex === -1 || currentIndex === this.reception.length - 1) {
+          newExpedId = this.reception[0].ExpedId;
         } else {
-          newExpedId = this.NoShipped[currentIndex + 1].ExpedId;
+          newExpedId = this.reception[currentIndex + 1].ExpedId;
         }
         this.$refs[ref].value = newExpedId;
         this.textField3 = newExpedId;
@@ -296,15 +313,14 @@ export default {
   },
   data() {
     return {
-      NoShipped: [],
+      reception: null,
       state: false,
       textField3: "",
       ExpedID: "",
-      headers: [
-        { text: "ExpedId", value: "ExpedId" },
-        { text: "Shop", value: "Shop" },
-        { text: "Order", value: "Order" },
-      ],
+      headers: "",
+      selectedAlbaran: null,
+      selectedReference: null,
+      referenceItems: null,
     };
   },
 };
