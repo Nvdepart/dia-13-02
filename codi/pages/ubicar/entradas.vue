@@ -15,7 +15,7 @@
             <h1>Nombre</h1>
           </v-col>
           <v-col cols="8" :style="{ 'font-size': '25px' }">
-            <h1>Nombre</h1>
+            <h1>{{ mensage }}</h1>
           </v-col>
         </v-row>
       </div>
@@ -75,7 +75,7 @@
               }"
               @keydown.up.prevent="previousOption"
               @keydown.down.prevent="nextOption"
-              @change="filterDataByReference"
+              @change="loadUbicaciones(selectedReference)"
               @keydown.enter="moveToNextCombobox"
               ref="combobox2"
             ></v-combobox>
@@ -83,7 +83,7 @@
         </v-row>
       </div>
 
-      <!-- <div>
+      <div>
         <v-row>
           <v-col
             cols="4"
@@ -92,11 +92,11 @@
           >
             <h1>Ubic :</h1>
           </v-col>
-          <v-col cols="8" v-if="reception">
+          <v-col cols="8" v-if="ubicaciones.length">
             <v-combobox
-              :items="reception.Data"
-              item-value="reception.Data.C1"
-              item-text="reception.Data.C1"
+              v-model="selectedUbicacion"
+              :items="ubicaciones"
+              label="Ubicación"
               rounded
               :style="{
                 'font-size': '40px',
@@ -140,11 +140,12 @@
             ></v-text-field>
           </v-col>
         </v-row>
-      </div> -->
+      </div>
+      -->
       <br />
-      <div v-if="state">
+      <div v-if="owner">
         <h1 style="font-size: 30px; background-color: green">
-          <span style="color: white">El pedido se ha bien enviado</span>
+          <span style="color: white">{{ owner }}</span>
         </h1>
       </div>
     </div>
@@ -159,7 +160,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(row, index) in dataFiltered" :key="index">
+          <tr v-for="(row, index) in tableData" :key="index">
             <td v-for="(cell, key) in row" :key="key">{{ cell }}</td>
           </tr>
         </tbody>
@@ -186,6 +187,8 @@ export default {
       "http://127.0.0.1:8080/apipda/doreception?reception=000&user=1&pda=1&referencia=1301515&cantidad=24"
     );
     this.tableData = response.data.Data;
+    this.mensage = response.data.Msg;
+    this.headers = response.data.Headers;
     console.log("la premiere table", this.tableData);
     this.albarans = this.tableData.map((item) => item.C1);
   },
@@ -218,9 +221,9 @@ export default {
       this.$nextTick(() => {
         if (this.$refs.combobox1.focused) {
           this.$refs.combobox2.focus();
-          // } else if (this.$refs.combobox2.focused) {
-          //   this.$refs.combobox3.focus();
-          // } else if (this.$refs.combobox3.focused) {
+        } else if (this.$refs.combobox2.focused) {
+          this.$refs.combobox3.focus();
+        } else if (this.$refs.combobox3.focused) {
           this.$refs.vTextField3.focus();
         }
       });
@@ -231,13 +234,36 @@ export default {
         `http://127.0.0.1:8080/apipda/doreception?reception=123&user=1&pda=1&albaran=${this.selectedAlbaran}&cantidad=24`
       );
       this.tableData = response.data.Data;
-      this.references = [...new Set(this.tableData.map((item) => item.C2))];
+      this.mensage = response.data.Msg;
+      this.headers = response.data.Headers;
+      console.log("la deuxieme table", this.tableData);
+      this.references = [...new Set(this.tableData.map((item) => item.C1))];
       this.selectedReference = "";
     },
     filterDataByReference() {
       this.tableData = this.dataFiltered;
     },
-
+    loadUbicaciones(referencia) {
+      this.$axios
+        .get(
+          `http://127.0.0.1:8080/apipda/doreception?reception=123&user=1&pda=1&referencia=1301515&cantidad=24`
+        )
+        .then((response) => {
+          this.tableData = response.data.Data;
+          this.ubicaciones = response.data.Data;
+          this.mensage = response.data.Msg;
+          this.headers = response.data.Headers;
+          this.owner = response.data.Owner;
+          console.log("la troisieme table", this.tableData);
+          this.ubicaciones = [
+            ...new Set(this.tableData.map((item) => item.C1)),
+          ];
+          this.selectedUbicacion = "";
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     focusTextField(ref) {
       this.$refs[ref].focus();
     },
@@ -300,11 +326,15 @@ export default {
     return {
       albarans: [],
       references: [],
+      ubicaciones: [],
       state: false,
       textField3: "",
-      headers: ["ALBARAN", "PROVEEDOR", "LINEAS", "CANTIDAD"],
+      mensage: "",
+      owner: "",
+      headers: [],
       selectedAlbaran: null,
       selectedReference: null,
+      selectedUbicacion: null,
       tableData: [],
     };
   },
