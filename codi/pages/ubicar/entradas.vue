@@ -184,7 +184,7 @@ export default {
   },
   async created() {
     const response = await this.$axios.get(
-      "http://127.0.0.1:8080/apipda/doreception?reception=000&user=1&pda=1&referencia=1301515&cantidad=24"
+      "http://127.0.0.1:8888/apipda/doreception?reception=000&user=1&pda=1&referencia=1301515&cantidad=24"
     );
     this.tableData = response.data.Data;
     this.mensage = response.data.Msg;
@@ -231,7 +231,7 @@ export default {
 
     async loadReferenceData() {
       const response = await this.$axios.get(
-        `http://127.0.0.1:8080/apipda/doreception?reception=123&user=1&pda=1&albaran=${this.selectedAlbaran}&cantidad=24`
+        `http://127.0.0.1:8888/apipda/doreception?reception=123&user=1&pda=1&albaran=${this.selectedAlbaran}&cantidad=24`
       );
       this.tableData = response.data.Data;
       this.mensage = response.data.Msg;
@@ -246,7 +246,7 @@ export default {
     loadUbicaciones(referencia) {
       this.$axios
         .get(
-          `http://127.0.0.1:8080/apipda/doreception?reception=123&user=1&pda=1&referencia=1301515&cantidad=24`
+          `http://127.0.0.1:8888/apipda/doreception?reception=123&user=1&pda=1&referencia=1301515&cantidad=24`
         )
         .then((response) => {
           this.tableData = response.data.Data;
