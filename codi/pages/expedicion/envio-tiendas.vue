@@ -1,5 +1,5 @@
 <template>
-  <div style="text-align: center; font-size: 35px">
+  <div @keyup.esc="goBack" style="text-align: center; font-size: 35px">
     <div style="padding-bottom: 50px">
       <h1>INDICAR PICKING</h1>
     </div>
@@ -82,7 +82,7 @@ export default {
       this.$axios
         //        .get(`http://192.168.0.181:8080/apipda/findpicking?pickingid=${this.pickingId}`)
         .get(
-          `http://127.0.0.1:8888/apipda/findpicking?pickingid=${this.pickingId}`
+          `http://127.0.0.1:8080/apipda/findpicking?pickingid=${this.pickingId}`
         )
         // http://127.0.0.1:8080/apipda/findpicking?pickingid=${this.pickingId}
         .then((response) => {
@@ -115,6 +115,9 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+    goBack() {
+      this.$router.go(-1); // Revenir à la page précédente
     },
   },
 };

@@ -69,7 +69,7 @@ export default {
     checkUserExistence() {
       this.$axios
         //        .get(`http://192.168.0.181:8080/apipda/user?user=${this.userId}`)
-        .get(`http://127.0.0.1:8888/apipda/user?user=${this.userId}`)
+        .get(`http://127.0.0.1:8080/apipda/user?user=${this.userId}`)
         // http://127.0.0.1:8080/apipda/user?user=1
         .then((response) => {
           console.log(response);

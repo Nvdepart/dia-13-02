@@ -1,5 +1,8 @@
 <template>
-  <div style="text-align: center; font-size: 35px; padding-bottom: 50px">
+  <div
+    @keyup.esc="goBack"
+    style="text-align: center; font-size: 35px; padding-bottom: 50px"
+  >
     <div>
       <h1>INDICAR PICKING</h1>
     </div>
@@ -144,6 +147,9 @@ export default {
         /* this.pickingId = "";
         this.ubicId = ""; */
       }
+    },
+    goBack() {
+      this.$router.go(-1); // Revenir à la page précédente
     },
   },
 };

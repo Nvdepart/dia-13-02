@@ -1,5 +1,5 @@
 <template>
-  <div class="centered pa-4 ma-2">
+  <div @keyup.esc="goBack" class="centered pa-4 ma-2">
     <div>
       <h1>Envio Pedido TIENDAS</h1>
       <br />
@@ -170,7 +170,7 @@ export default {
       this.$axios
         //        .get(`http://192.168.0.181:8080/apipda/findpicking?pickingid=9876543&pda=1&user=1&ubicacio=00`)
         .get(
-          `http://127.0.0.1:8888/apipda/doshippingweb?shippingid=9876543&pda=1&user=1&box=2`
+          `http://127.0.0.1:8080/apipda/doshippingweb?shippingid=9876543&pda=1&user=1&box=2`
         )
         // http://127.0.0.1:8080/apipda/findpicking?pickingid=${this.pickingId}
         .then((response) => {
@@ -221,12 +221,15 @@ export default {
         this.state = true;
         this.focusTextField("textField1");
         // Réinitialiser les valeurs des champs de texte
-        this.textField1 = "";
+
         this.textField2 = "";
         this.textField3 = "";
         this.textField4 = "";
         this.textField5 = "";
       }
+    },
+    goBack() {
+      this.$router.go(-1); // Revenir à la page précédente
     },
   },
   data() {

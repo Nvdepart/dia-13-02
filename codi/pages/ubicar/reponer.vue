@@ -1,5 +1,5 @@
 <template>
-  <div class="div0 pa-2 ma-2">
+  <div @keyup.esc="goBack" class="div0 pa-2 ma-2">
     <div class="centered pa-0 ma-0">
       <h1 style="font-size: 50px">Mensage</h1>
       <br />
@@ -51,10 +51,11 @@
               'font-size': '25px',
             }"
           >
-            <h1>Cantidad</h1>
+            <h1>{{ selectedC4 }}</h1>
           </v-col>
         </v-row>
       </div>
+
       <div>
         <v-row>
           <v-col
@@ -84,6 +85,7 @@
           </v-col>
         </v-row>
       </div>
+
       <div class="leftdiv">
         <v-row>
           <v-col
@@ -113,6 +115,7 @@
           </v-col>
         </v-row>
       </div>
+
       <div>
         <v-row>
           <v-col
@@ -142,11 +145,40 @@
           </v-col>
         </v-row>
       </div>
+
       <br />
       <div v-if="state">
         <h1 style="font-size: 30px; background-color: green">
           <span style="color: yellow">Cantidad en 1ª</span>
         </h1>
+      </div>
+      <div>
+        <v-combobox
+          v-model="selectedItem"
+          :items="albaran"
+          item-text="albaran"
+          item-value="albaran"
+          label="Select an item"
+          clearable
+        />
+        <table class="my-table">
+          <thead>
+            <tr>
+              <th v-for="(header, index) in headers" :key="index">
+                {{ header }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="(row, index) in tableData"
+              :key="index"
+              @click="onRowClick(row)"
+            >
+              <td v-for="(cell, key) in row" :key="key">{{ cell }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -155,34 +187,29 @@
 <script>
 export default {
   mounted() {
-    this.checkPickingExistence;
+    this.$axios
+      //        .get(`http://192.168.0.181:8080/apipda/findpicking?pickingid=9876543&pda=1&user=1&ubicacio=00`)
+      .get(
+        `http://127.0.0.1:8080/apipda/doreception?reception=000&user=1&pda=1&referencia=1301515&cantidad=24`
+      )
+      // http://127.0.0.1:8080/apipda/findpicking?pickingid=${this.pickingId}
+      .then((response) => {
+        console.log("el numero de picking se ha encontrado", response);
+        if (response.data.Result) {
+          // L'utilisateur existe, récupérez les informations de l'utilisateur
+
+          this.headers = response.data.Headers;
+          this.tableData = response.data.Data;
+          console.log("le numero de reference est ", this.tableData);
+          this.albaran = this.tableData.map((item) => item.C1);
+          console.log("La valeur du ALBARAN est", this.albaran);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },
   methods: {
-    checkPickingExistence() {
-      this.$axios
-        //        .get(`http://192.168.0.181:8080/apipda/findpicking?pickingid=9876543&pda=1&user=1&ubicacio=00`)
-        .get(
-          `http://127.0.0.1:8888/apipda/doshippingweb?shippingid=9876543&pda=1&user=1&box=2`
-        )
-        // http://127.0.0.1:8080/apipda/findpicking?pickingid=${this.pickingId}
-        .then((response) => {
-          console.log(
-            "el numero de picking se ha encontrado",
-            response.data.Result
-          );
-          if (response.data.Result) {
-            // L'utilisateur existe, récupérez les informations de l'utilisateur
-            let self = this;
-            self.pickingExists = true;
-            console.log(self.pickingExists);
-            self.shipped = response.data;
-            console.log("le numero de reference est ", self.shipped);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
     focusTextField(ref) {
       this.$refs[ref].focus();
     },
@@ -220,13 +247,23 @@ export default {
         this.textField5 = "";
       }
     },
+    onRowClick(row) {
+      this.selectedItem = row.albaran;
+      console.log("Row clicked: ", row);
+      this.selectedC4 = row.C4;
+    },
+    goBack() {
+      this.$router.go(-1); // Revenir à la page précédente
+    },
   },
   data() {
     return {
-      shipped: null,
+      tableData: [],
+      albaran: null,
       state: false,
-      textField1: "",
-      textField2: "",
+      headers: [],
+      selectedItem: null,
+      selectedC4: "",
       textField3: "",
       textField4: "",
       textField5: "",
@@ -270,5 +307,29 @@ export default {
   font-size: 3rem;
   font-weight: bold;
   color: white;
+}
+
+.my-table {
+  width: 100%;
+  max-width: 460px;
+  border-collapse: collapse;
+  text-align: center;
+  justify-content: center;
+}
+
+.my-table th,
+.my-table td {
+  text-align: left;
+  padding: 0px 10px 0px 10px;
+  font-size: 20px;
+}
+
+.my-table th {
+  background-color: #1d6acf;
+  color: white;
+}
+
+.my-table tr:nth-child(even) {
+  background-color: #f2f2f2;
 }
 </style>

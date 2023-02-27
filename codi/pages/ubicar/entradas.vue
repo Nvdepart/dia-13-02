@@ -1,5 +1,5 @@
 <template>
-  <div class="centered pa-4 ma-2">
+  <div class="centered pa-4 ma-2" @keyup.esc="goBack">
     <div>
       <h1 style="font-size: 40px">Entradas</h1>
       <br />
@@ -20,7 +20,7 @@
         </v-row>
       </div>
 
-      <div>
+      <div v-if="albarans.length">
         <v-row>
           <v-col
             cols="4"
@@ -41,17 +41,15 @@
                 height: '100%',
                 border: '2px solid blue',
               }"
-              @keydown.up.prevent="previousOption"
-              @keydown.down.prevent="nextOption"
+              @keydown.enter.prevent="moveToNextInput($event, $refs.combobox2)"
               @change="loadReferenceData"
-              @keydown.enter="moveToNextCombobox"
               ref="combobox1"
             ></v-combobox>
           </v-col>
         </v-row>
       </div>
 
-      <div>
+      <div v-if="references.length">
         <v-row>
           <v-col
             cols="4"
@@ -62,7 +60,6 @@
           </v-col>
           <v-col cols="8">
             <v-combobox
-              v-if="references.length"
               v-model="selectedReference"
               :items="references"
               label="Select Reference"
@@ -73,17 +70,15 @@
                 height: '100%',
                 border: '2px solid blue',
               }"
-              @keydown.up.prevent="previousOption"
-              @keydown.down.prevent="nextOption"
+              @keydown.enter.prevent="moveToNextInput($event, $refs.combobox3)"
               @change="loadUbicaciones(selectedReference)"
-              @keydown.enter="moveToNextCombobox"
               ref="combobox2"
             ></v-combobox>
           </v-col>
         </v-row>
       </div>
 
-      <div>
+      <div v-if="ubicaciones.length">
         <v-row>
           <v-col
             cols="4"
@@ -92,7 +87,7 @@
           >
             <h1>Ubic :</h1>
           </v-col>
-          <v-col cols="8" v-if="ubicaciones.length">
+          <v-col cols="8">
             <v-combobox
               v-model="selectedUbicacion"
               :items="ubicaciones"
@@ -104,17 +99,14 @@
                 height: '100%',
                 border: '2px solid blue',
               }"
-              @keydown.up.prevent="previousOption"
-              @keydown.down.prevent="nextOption"
-              @change="moveToNextCombobox"
-              @keydown.enter="moveToNextCombobox"
+              @keydown.enter.prevent="moveToNextInput($event, $refs.textField1)"
               ref="combobox3"
             ></v-combobox>
           </v-col>
         </v-row>
       </div>
 
-      <div>
+      <div v-if="ubicaciones.length">
         <v-row>
           <v-col
             cols="4"
@@ -134,9 +126,9 @@
                 border: '2px solid blue',
               }"
               type="number"
-              v-model="textField3"
-              ref="textField3"
-              @keyup.enter="sendDataToServer"
+              v-model="inputValue"
+              ref="textField1"
+              @keyup.enter="sendValueToServer"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -184,7 +176,7 @@ export default {
   },
   async created() {
     const response = await this.$axios.get(
-      "http://127.0.0.1:8888/apipda/doreception?reception=000&user=1&pda=1&referencia=1301515&cantidad=24"
+      "http://127.0.0.1:8080/apipda/doreception?reception=000&user=1&pda=1&referencia=1301515&cantidad=24"
     );
     this.tableData = response.data.Data;
     this.mensage = response.data.Msg;
@@ -193,45 +185,35 @@ export default {
     this.albarans = this.tableData.map((item) => item.C1);
   },
   methods: {
-    previousOption() {
-      if (this.tableData.length && this.albarans !== null) {
-        const index = this.tableData.findIndex(
-          (item) => item.albarans === this.albarans
-        );
-        if (index > 0) {
-          this.albarans = this.tableData[index - 1].albarans;
-        } else {
-          this.albarans = this.tableData[this.tableData.length - 1].albarans;
-        }
+    changeOption(ref, direction) {
+      const items = this.$refs[ref].items;
+      if (items.length && this[ref] !== null) {
+        const index = items.findIndex((item) => item === this[ref]);
+        let newIndex = direction === "previous" ? index - 1 : index + 1;
+        if (newIndex < 0) newIndex = items.length - 1;
+        if (newIndex >= items.length) newIndex = 0;
+        this[ref] = items[newIndex];
       }
-    },
-    nextOption() {
-      if (this.tableData.length && this.albarans !== null) {
-        const index = this.tableData.findIndex(
-          (item) => item.albarans === this.albarans
-        );
-        if (index < this.tableData.length - 1) {
-          this.albarans = this.tableData[index + 1].albarans;
-        } else {
-          this.albarans = this.tableData[0].albarans;
-        }
-      }
-    },
-    moveToNextCombobox() {
-      this.$nextTick(() => {
-        if (this.$refs.combobox1.focused) {
-          this.$refs.combobox2.focus();
-        } else if (this.$refs.combobox2.focused) {
-          this.$refs.combobox3.focus();
-        } else if (this.$refs.combobox3.focused) {
-          this.$refs.vTextField3.focus();
-        }
-      });
     },
 
+    moveToNextInput(event, nextInputRef) {
+      if (event.target === event.currentTarget && event.key === "Enter") {
+        if (nextInputRef && typeof nextInputRef.focus === "function") {
+          this.$nextTick(() => nextInputRef.focus());
+        } else {
+          console.warn(`Invalid nextInputRef: ${nextInputRef}`);
+        }
+      }
+    },
+    changeTextValue(ref, value) {
+      this[ref] = value;
+    },
+    goBack() {
+      this.$router.go(-1); // Revenir à la page précédente
+    },
     async loadReferenceData() {
       const response = await this.$axios.get(
-        `http://127.0.0.1:8888/apipda/doreception?reception=123&user=1&pda=1&albaran=${this.selectedAlbaran}&cantidad=24`
+        `http://127.0.0.1:8080/apipda/doreception?reception=123&user=1&pda=1&albaran=${this.selectedAlbaran}&cantidad=24`
       );
       this.tableData = response.data.Data;
       this.mensage = response.data.Msg;
@@ -246,7 +228,7 @@ export default {
     loadUbicaciones(referencia) {
       this.$axios
         .get(
-          `http://127.0.0.1:8888/apipda/doreception?reception=123&user=1&pda=1&referencia=1301515&cantidad=24`
+          `http://127.0.0.1:8080/apipda/doreception?reception=123&user=1&pda=1&referencia=1301515&cantidad=24`
         )
         .then((response) => {
           this.tableData = response.data.Data;
@@ -264,78 +246,98 @@ export default {
           console.log(error);
         });
     },
-    focusTextField(ref) {
-      this.$refs[ref].focus();
-    },
 
-    sendDataToServer() {
-      if (
-        this.combobox1 &&
-        this.combobox2 &&
-        this.combobox3 &&
-        this.vTextField3
-      ) {
-        // envoyer les données au serveur
-        console.log("Envoi de données au serveur:", this.textField3);
-        // L'envoie avec succes
-        this.state = true;
+    sendValueToServer() {
+      this.$axios
+        .post("/api/my-endpoint", { value: this.inputValue })
+        .then((response) => {
+          console.log(response.data);
+          console.log(
+            this.selectedAlbaran,
+            this.selectedReference,
+            this.selectedUbicacion,
+            this.inputValue
+          );
+          this.inputValue = "";
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    // sendDataToServer() {
+    //   if (
+    //     this.combobox1 &&
+    //     this.combobox2 &&
+    //     this.combobox3 &&
+    //     this.vTextField3
+    //   ) {
+    //     // envoyer les données au serveur
+    //     console.log(
+    //       "Envoi de données au serveur:",
+    //       this.combobox1,
+    //       this.combobox2,
+    //       this.combobox3,
+    //       this.textField3
+    //     );
+    //     // L'envoie avec succes
+    //     this.state = true;
 
-        // Réinitialiser les valeurs des champs de texte
-        this.textField3 = "";
-      }
-    },
-    handleUpDownKeys(event, ref) {
-      if (event.keyCode === 38) {
-        // Up arrow key
-        if (this.reception.length === 0) {
-          return;
-        }
-        const currentExpedId = this.$refs[ref].value;
-        const currentIndex = this.reception.findIndex(
-          (el) => el.ExpedId === currentExpedId
-        );
-        let newExpedId;
-        if (currentIndex === -1 || currentIndex === 0) {
-          newExpedId = this.reception[this.reception.length - 1].ExpedId;
-        } else {
-          newExpedId = this.reception[currentIndex - 1].ExpedId;
-        }
-        this.$refs[ref].value = newExpedId;
-        this.textField3 = newExpedId;
-      } else if (event.keyCode === 40) {
-        // Down arrow key
-        if (this.reception.length === 0) {
-          return;
-        }
-        const currentExpedId = this.$refs[ref].value;
-        const currentIndex = this.reception.findIndex(
-          (el) => el.ExpedId === currentExpedId
-        );
-        let newExpedId;
-        if (currentIndex === -1 || currentIndex === this.reception.length - 1) {
-          newExpedId = this.reception[0].ExpedId;
-        } else {
-          newExpedId = this.reception[currentIndex + 1].ExpedId;
-        }
-        this.$refs[ref].value = newExpedId;
-        this.textField3 = newExpedId;
-      }
-    },
+    //     // Réinitialiser les valeurs des champs de texte
+    //     this.textField3 = "";
+    //   }
+    // },
+    // handleUpDownKeys(event, ref) {
+    //   if (event.keyCode === 38) {
+    //     // Up arrow key
+    //     if (this.reception.length === 0) {
+    //       return;
+    //     }
+    //     const currentExpedId = this.$refs[ref].value;
+    //     const currentIndex = this.reception.findIndex(
+    //       (el) => el.ExpedId === currentExpedId
+    //     );
+    //     let newExpedId;
+    //     if (currentIndex === -1 || currentIndex === 0) {
+    //       newExpedId = this.reception[this.reception.length - 1].ExpedId;
+    //     } else {
+    //       newExpedId = this.reception[currentIndex - 1].ExpedId;
+    //     }
+    //     this.$refs[ref].value = newExpedId;
+    //     this.textField3 = newExpedId;
+    //   } else if (event.keyCode === 40) {
+    //     // Down arrow key
+    //     if (this.reception.length === 0) {
+    //       return;
+    //     }
+    //     const currentExpedId = this.$refs[ref].value;
+    //     const currentIndex = this.reception.findIndex(
+    //       (el) => el.ExpedId === currentExpedId
+    //     );
+    //     let newExpedId;
+    //     if (currentIndex === -1 || currentIndex === this.reception.length - 1) {
+    //       newExpedId = this.reception[0].ExpedId;
+    //     } else {
+    //       newExpedId = this.reception[currentIndex + 1].ExpedId;
+    //     }
+    //     this.$refs[ref].value = newExpedId;
+    //     this.textField3 = newExpedId;
+    //   }
+    // },
   },
   data() {
     return {
+      headers: [],
+      tableData: [],
       albarans: [],
       references: [],
       ubicaciones: [],
       state: false,
-      textField3: "",
+      inputValue: "",
       mensage: "",
       owner: "",
-      headers: [],
       selectedAlbaran: null,
       selectedReference: null,
       selectedUbicacion: null,
-      tableData: [],
     };
   },
 };
