@@ -188,11 +188,9 @@
 export default {
   mounted() {
     this.$axios
-      //        .get(`http://192.168.0.181:8080/apipda/findpicking?pickingid=9876543&pda=1&user=1&ubicacio=00`)
-      .get(
-        `http://127.0.0.1:8080/apipda/doreception?reception=000&user=1&pda=1&referencia=1301515&cantidad=24`
-      )
-      // http://127.0.0.1:8080/apipda/findpicking?pickingid=${this.pickingId}
+
+      .get(`http://127.0.0.1:8080/apipda/dorepos&usuid=1&pda=12`)
+
       .then((response) => {
         console.log("el numero de picking se ha encontrado", response);
         if (response.data.Result) {
