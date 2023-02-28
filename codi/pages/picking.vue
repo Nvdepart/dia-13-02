@@ -68,8 +68,6 @@ export default {
   },
   mounted() {
     this.checkPda();
-    console.log("je suis charge avec succes");
-    console.log("la PDA trouvee est :", this.pda);
   },
   methods: {
     checkPda(state) {
@@ -80,7 +78,7 @@ export default {
         return false;
       } else {
         this.pda = pda;
-        console.log("je veux voir la pda", this.pda);
+        console.log("la pda est chargee : ", this.pda);
         return true;
       }
     },

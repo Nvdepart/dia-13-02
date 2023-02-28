@@ -147,12 +147,12 @@
       </div>
 
       <br />
-      <div v-if="state">
+      <div v-if="tableData">
         <h1 style="font-size: 30px; background-color: green">
-          <span style="color: yellow">Cantidad en 1ª</span>
+          <span style="color: yellow">{{ tableData.TextMovido }}</span>
         </h1>
       </div>
-      <div>
+      <!-- <div v-if="tableData">
         <v-combobox
           v-model="selectedItem"
           :items="albaran"
@@ -179,35 +179,37 @@
             </tr>
           </tbody>
         </table>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  mounted() {
-    this.$axios
-      .get(
-        `http://127.0.0.1:8888/apipda/dorepos?cola=88888&usuid=1&pdaid=12&ref=1301515&ubic1=445566&ubic2=667788&cantidad=44`
-      )
-      .then((response) => {
-        console.log("el numero de picking se ha encontrado", response);
-        if (response.data.Result) {
-          // L'utilisateur existe, récupérez les informations de l'utilisateur
-
-          this.headers = response.data.Headers;
-          this.tableData = response.data;
-          console.log("le numero de reference est ", this.tableData);
-          this.albaran = this.tableData.map((item) => item.C1);
-          console.log("La valeur du ALBARAN est", this.albaran);
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  created() {
+    this.getDadesReponer();
   },
+
   methods: {
+    getDadesReponer() {
+      this.$axios
+        .get(
+          `http://127.0.0.1:8888/apipda/dorepos?cola=88888&usuid=1&pdaid=12&ref=1301515&ubic1=445566&ubic2=667788&cantidad=44`
+        )
+        .then((response) => {
+          if (response.data.Result) {
+            // L'utilisateur existe, récupérez les informations de l'utilisateur
+
+            this.headers = response.data.Headers;
+            this.tableData = response.data;
+            this.albaran = this.tableData.map((item) => item.C1);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
     focusTextField(ref) {
       this.$refs[ref].focus();
     },

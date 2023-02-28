@@ -248,21 +248,37 @@ export default {
     },
 
     sendValueToServer() {
-      this.$axios
-        .post("/api/my-endpoint", { value: this.selectedAlbaran })
-        .then((response) => {
-          console.log(response.data);
-          console.log(
-            this.selectedAlbaran,
-            this.selectedReference,
-            this.selectedUbicacion,
-            this.inputValue
-          );
-          this.inputValue = "";
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      if (
+        this.selectedAlbaran &&
+        this.selectedReference &&
+        this.selectedUbicacion &&
+        this.inputValue
+      ) {
+        this.$axios
+          .post("/api/my-endpoint", {
+            value: this.selectedAlbaran,
+            reference: this.selectedReference,
+            ubicacion: this.selectedUbicacion,
+            inputValue: this.inputValue,
+          })
+          .then((response) => {
+            console.log(response.data);
+            console.log(
+              this.selectedAlbaran,
+              this.selectedReference,
+              this.selectedUbicacion,
+              this.inputValue
+            );
+            this.inputValue = "";
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } else {
+        // Un ou plusieurs champs sont vides, on ne peut pas envoyer les valeurs
+
+        alert("Veuillez remplir tous les champs avant d'envoyer les valeurs.");
+      }
     },
     // sendDataToServer() {
     //   if (
