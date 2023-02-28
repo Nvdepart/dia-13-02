@@ -1,7 +1,7 @@
 <template>
-  <div @keyup.esc="goBack" class="div0 pa-2 ma-2">
+  <div @keyup.esc="goBack" class="div0 pa-2 ma-2" v-if="tableData">
     <div class="centered pa-0 ma-0">
-      <h1 style="font-size: 50px">Mensage</h1>
+      <h1 style="font-size: 50px">{{ tableData.Msg }}</h1>
       <br />
       <div>
         <v-row>
@@ -13,7 +13,7 @@
             <h1>Referencia:</h1>
           </v-col>
           <v-col cols="8" :style="{ 'font-size': '25px' }">
-            <h1>Referencia</h1>
+            <h1>{{ tableData.Ref }}</h1>
           </v-col>
         </v-row>
       </div>
@@ -30,7 +30,7 @@
             <h1>Nombre :</h1>
           </v-col>
           <v-col cols="8" :style="{ 'font-size': '25px' }">
-            <h1>Nombre</h1>
+            <h1>{{ tableData.Nombre }}</h1>
           </v-col>
         </v-row>
       </div>
@@ -51,7 +51,7 @@
               'font-size': '25px',
             }"
           >
-            <h1>{{ selectedC4 }}</h1>
+            <h1>{{ tableData.Stock1 }}</h1>
           </v-col>
         </v-row>
       </div>
@@ -188,18 +188,16 @@
 export default {
   mounted() {
     this.$axios
-
       .get(
         `http://127.0.0.1:8888/apipda/dorepos?cola=88888&usuid=1&pdaid=12&ref=1301515&ubic1=445566&ubic2=667788&cantidad=44`
       )
-
       .then((response) => {
         console.log("el numero de picking se ha encontrado", response);
         if (response.data.Result) {
           // L'utilisateur existe, récupérez les informations de l'utilisateur
 
           this.headers = response.data.Headers;
-          this.tableData = response.data.Data;
+          this.tableData = response.data;
           console.log("le numero de reference est ", this.tableData);
           this.albaran = this.tableData.map((item) => item.C1);
           console.log("La valeur du ALBARAN est", this.albaran);
