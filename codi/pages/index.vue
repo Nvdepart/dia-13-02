@@ -76,9 +76,9 @@ export default {
           if (response.data.Result) {
             // L'utilisateur existe, récupérez les informations de l'utilisateur
             this.userExists = true;
-            console.log(this.userExists);
+            console.log("el usuario esta disponible", this.userExists);
             this.user = response.data;
-            console.log(this.user);
+            console.log("el usuario esta disponible en este", this.user);
 
             // Ouvrez la page de menu et passez les informations de l'utilisateur en tant que paramètres d'URL
             this.$router.push({
@@ -87,7 +87,7 @@ export default {
             });
 
             // fermer la page de recherche
-            window.close();
+            // window.close();
           } else {
             // L'utilisateur n'existe pas, ouvrez la page d'authentification initiale
 
