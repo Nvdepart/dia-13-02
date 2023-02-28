@@ -28,7 +28,7 @@ export default {
       if (this.numpda) {
         localStorage.setItem("ID", this.numpda);
         this.$router.push({
-          name: "usuari",
+          name: "index",
           params: {
             id: "ID",
             value: this.numpda,
