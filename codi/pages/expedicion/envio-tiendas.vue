@@ -82,7 +82,7 @@ export default {
       this.$axios
         //        .get(`http://192.168.0.181:8080/apipda/findpicking?pickingid=${this.pickingId}`)
         .get(
-          `http://127.0.0.1:8080/apipda/findpicking?pickingid=${this.pickingId}`
+          `http://127.0.0.1:8888/apipda/findpicking?pickingid=${this.pickingId}`
         )
         // http://127.0.0.1:8080/apipda/findpicking?pickingid=${this.pickingId}
         .then((response) => {

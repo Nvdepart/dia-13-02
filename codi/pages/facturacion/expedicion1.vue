@@ -163,19 +163,19 @@
 <script>
 export default {
   mounted() {
-    this.checkPickingExistence;
+    this.checkShippedExistence;
   },
   methods: {
-    checkPickingExistence() {
+    checkShippedExistence() {
       this.$axios
         //        .get(`http://192.168.0.181:8080/apipda/findpicking?pickingid=9876543&pda=1&user=1&ubicacio=00`)
         .get(
-          `http://127.0.0.1:8080/apipda/doshippingweb?shippingid=9876543&pda=1&user=1&box=2`
+          `http://127.0.0.1:8888/apipda/doshippingweb?shippingid=9876543&pda=1&user=1&box=2`
         )
         // http://127.0.0.1:8080/apipda/findpicking?pickingid=${this.pickingId}
         .then((response) => {
           console.log(
-            "el numero de picking se ha encontrado",
+            "el numero de shipped se ha encontrado",
             response.data.Result
           );
           if (response.data.Result) {

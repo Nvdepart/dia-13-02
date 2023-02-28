@@ -91,7 +91,7 @@ export default {
       console.log("la valeur de idPicking is ", id);
       this.$axios
         .get(
-          `http://127.0.0.1:8080/apipda/dopicking?pickingid=${id}&pda=1&user=1&ubicid=11&artid=22&ordid=33&cantidad=+1&cb=123456789`
+          `http://127.0.0.1:8888/apipda/dopicking?pickingid=${id}&pda=1&user=1&ubicid=11&artid=22&ordid=33&cantidad=+1&cb=123456789`
         )
         .then((response) => {
           this.picking = response.data;

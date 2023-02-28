@@ -189,7 +189,9 @@ export default {
   mounted() {
     this.$axios
 
-      .get(`http://127.0.0.1:8080/apipda/dorepos&usuid=1&pda=12`)
+      .get(
+        `http://127.0.0.1:8888/apipda/dorepos?cola=88888&usuid=1&pdaid=12&ref=1301515&ubic1=445566&ubic2=667788&cantidad=44`
+      )
 
       .then((response) => {
         console.log("el numero de picking se ha encontrado", response);
